@@ -21,7 +21,7 @@ app.use('/countries', countryRoutes);
 
 // Motor de vistas
 app.set('view-engine', 'ejs');
-app.set('views', path.resolve('scr/views'));
+app.set('views', path.resolve('src/views'));
 
 // Archivos estáticos
 app.use(express.static('public'));

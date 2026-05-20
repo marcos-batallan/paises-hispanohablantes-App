@@ -49,12 +49,9 @@ const countrySchema = new mongoose.Schema({
         required: true,
         trim: true,
     },
-    createdAt: {
-        type: Date,
-        default: Date.now  //fecha de cración
-    }
 }, {
     timestamps: true,
+    versionKey: false,
 });
 
 // Este índice interpreta una combinación única que no permite que un mismo usuario

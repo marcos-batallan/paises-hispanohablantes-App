@@ -1,7 +1,9 @@
 import express from "express";
 import {
     saveCountries,
-    getAllCountries
+    getAllCountries,
+    updateCountry,
+    deleteCountry
 } from "../controllers/countryControllers.mjs";
 
 // Crear un router de Express para manejar las rutas relacionadas con los países
@@ -12,6 +14,12 @@ router.post("/load", saveCountries);
 
 // Ruta para obtener la lista de todos los países almacenados en la base de datos
 router.get("/", getAllCountries);
+
+// Ruta para actualizar un país por su ID
+router.put("/:id", updateCountry);
+
+// Ruta para eliminar un país por su ID
+router.delete("/:id", deleteCountry);
 
 // Exportar el router para que pueda ser utilizado en el archivo principal de la aplicación
 export default router;

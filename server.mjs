@@ -1,7 +1,7 @@
 import 'dotenv/config';
-import app from './scr/app.mjs';
-import connectDB from './scr/config/dbConfig.mjs';
-import { getSpanishSpeakingCountries } from './scr/services/countriesService.mjs';
+import app from './src/app.mjs';
+import connectDB from './src/config/dbConfig.mjs';
+import { getSpanishSpeakingCountries } from './src/services/countriesService.mjs';
 
 const PORT = process.env.PORT || 3000;
 

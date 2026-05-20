@@ -22,23 +22,33 @@ export const getSpanishSpeakingCountries = async () => {
 
         // Normalizar los datos para que tengan una estructura consistente
         const normalized = filtered.map(country => ({
-            name: country.name?.common || 'Sin nombre',
-            officialName:
-                country.name?.nativeName?.spa?.official || // Fallback al nombre oficial en español
-                country.name?.official ||
-                'Sin nombre oficial',
+
+            name: country.translations?.spa?.common
+                || country.name?.common
+                || 'Sin nombre',
+
+            officialName: country.translations?.spa?.official
+                || country.name?.official
+                || 'Sin nombre oficial',
+
             capital: country.capital?.[0] || 'Sin capital',
+
             region: country.region || 'Sin región',
+
             population: country.population || 0,
-            borders: country.borders?.join(', ') || 'Sin fronteras',
+
+            borders: country.borders || [],
+
             area: country.area || 0,
+
             timezones: country.timezones || [],
-            // El índice Gini puede estar en diferentes formatos, así que se intenta obtener de manera flexible
+
             gini: country.gini
                 ? Object.values(country.gini)[0]
                 : null,
-            flag: country.flags?.png || 'Sin bandera',
 
+            flag: country.flags?.png || 'Sin bandera',
+            
             // Dejar preparado el campo (pero se setea después)
             creador: null,        
         }));
