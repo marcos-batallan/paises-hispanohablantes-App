@@ -1,0 +1,101 @@
+<section class="dashboard">
+
+    <div class="container">
+
+        <div class="dashboard-header">
+
+            <div>
+
+                <h1 class="dashboard-title">
+                    Dashboard de Países
+                </h1>
+
+                <p class="dashboard-subtitle">
+
+                    Gestión completa de países hispanohablantes
+
+                </p>
+
+            </div>
+
+            <a href="/countries/create" class="btn-primary">
+
+                + Nuevo País
+
+            </a>
+
+        </div>
+
+        <div class="countries-grid">
+
+            <% countries.forEach(country => { %>
+
+                <article class="country-card">
+
+                    <img
+                        src="<%= country.flag %>"
+                        alt="<%= country.name %>"
+                        class="country-flag"
+                    >
+
+                    <div class="country-content">
+
+                        <h2>
+                            <%= country.name %>
+                        </h2>
+
+                        <p>
+                            <strong>Capital:</strong>
+                            <%= country.capital %>
+                        </p>
+
+                        <p>
+                            <strong>Región:</strong>
+                            <%= country.region %>
+                        </p>
+
+                        <p>
+                            <strong>Creador:</strong>
+                            <%= country.creador %>
+                        </p>
+
+                    </div>
+
+                    <div class="country-actions">
+
+                        <a
+                            href="/countries/edit/<%= country._id %>"
+                            class="btn-secondary"
+                        >
+
+                            Editar
+
+                        </a>
+
+                        <form
+                            action="/countries/<%= country._id %>?_method=DELETE"
+                            method="POST"
+                        >
+
+                            <button
+                                type="submit"
+                                class="btn-delete"
+                            >
+
+                                Eliminar
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </article>
+
+            <% }) %>
+
+        </div>
+
+    </div>
+
+</section>

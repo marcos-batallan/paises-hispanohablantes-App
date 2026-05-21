@@ -108,3 +108,31 @@ export const deleteCountry = async (req, res) => {
     }
 };
 
+// Controlador para renderizar el dashboard con la lista de países (HTML)
+export const renderDashboard = async (req, res) => {
+    try {
+        // Obtener todos los países de la base de datos, ordenados por nombre
+        const countries = await countryModel.find(
+            {
+                capital: { $exists: true, $ne: '' } // Filtrar países que tienen un campo capital definido y no vacío  }
+            })
+            .sort({ name: 1 }); // Ordenar por nombre de país en orden ascendente
+
+            // Renderizar la vista del dashboard con la lista de países
+            res.render("countries/dashboard", {
+                title: "Dashboard",
+                countries
+            });
+
+    } catch (error) {
+        // Manejar errores y renderizar una vista de error si ocurre algún problema al cargar el dashboard
+        res.status(500).render('feedback/feedback', {
+            type: 'error',
+            title: 'Error inesperado',
+            message: 'No se pudo completar la operación.',
+            redirect: '/countries/dashboard'
+        });
+    }
+};
+
+
