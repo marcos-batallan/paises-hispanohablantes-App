@@ -1,0 +1,286 @@
+<section class="form-section">
+
+    <div class="container">
+
+        <div class="form-header">
+
+            <div>
+
+                <h1 class="form-title">
+                    Agregar País
+                </h1>
+
+                <p class="form-subtitle">
+
+                    Completa la información del nuevo país
+                    hispanohablante.
+
+                </p>
+
+            </div>
+
+            <a
+                href="/countries"
+                class="btn-secondary"
+            >
+
+                ← Volver
+
+            </a>
+
+        </div>
+
+        <div class="form-card">
+
+            <form
+                action="/countries"
+                method="POST"
+                class="country-form"
+            >
+
+                <!-- NOMBRE -->
+
+                <div class="form-group">
+
+                    <label for="name">
+                        Nombre Oficial
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Ej: República Argentina"
+                        value="<%= oldData?.name || '' %>"
+                    >
+
+                    <% if (errors?.name) { %>
+
+                        <p class="form-error">
+                            <%= errors.name.msg %>
+                        </p>
+
+                    <% } %>
+
+                </div>
+
+                <!-- CAPITAL -->
+
+                <div class="form-group">
+
+                    <label for="capital">
+                        Capital
+                    </label>
+
+                    <input
+                        type="text"
+                        id="capital"
+                        name="capital"
+                        placeholder="Ej: Buenos Aires"
+                        value="<%= oldData?.capital || '' %>"
+                    >
+
+                    <% if (errors?.capital) { %>
+
+                        <p class="form-error">
+                            <%= errors.capital.msg %>
+                        </p>
+
+                    <% } %>
+
+                </div>
+
+                <!-- BORDERS -->
+
+                <div class="form-group">
+
+                    <label for="borders">
+                        Fronteras
+                    </label>
+
+                    <input
+                        type="text"
+                        id="borders"
+                        name="borders"
+                        placeholder="ARG, BRA, CHL"
+                        value="<%= oldData?.borders || '' %>"
+                    >
+
+                    <small class="form-help">
+
+                        Separar códigos por coma.
+
+                    </small>
+
+                    <% if (errors?.borders) { %>
+
+                        <p class="form-error">
+                            <%= errors.borders.msg %>
+                        </p>
+
+                    <% } %>
+
+                </div>
+
+                <!-- AREA -->
+
+                <div class="form-group">
+
+                    <label for="area">
+                        Área (km²)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="area"
+                        name="area"
+                        placeholder="Ej: 2780400"
+                        value="<%= oldData?.area || '' %>"
+                    >
+
+                    <% if (errors?.area) { %>
+
+                        <p class="form-error">
+                            <%= errors.area.msg %>
+                        </p>
+
+                    <% } %>
+
+                </div>
+
+                <!-- POPULATION -->
+
+                <div class="form-group">
+
+                    <label for="population">
+                        Población
+                    </label>
+
+                    <input
+                        type="number"
+                        id="population"
+                        name="population"
+                        placeholder="Ej: 46000000"
+                        value="<%= oldData?.population || '' %>"
+                    >
+
+                    <% if (errors?.population) { %>
+
+                        <p class="form-error">
+                            <%= errors.population.msg %>
+                        </p>
+
+                    <% } %>
+
+                </div>
+
+                <!-- GINI -->
+
+                <div class="form-group">
+
+                    <label for="gini">
+                        Índice Gini
+                    </label>
+
+                    <input
+                        type="number"
+                        step="0.1"
+                        id="gini"
+                        name="gini"
+                        placeholder="Ej: 42.3"
+                        value="<%= oldData?.gini || '' %>"
+                    >
+
+                    <% if (errors?.gini) { %>
+
+                        <p class="form-error">
+                            <%= errors.gini.msg %>
+                        </p>
+
+                    <% } %>
+
+                </div>
+
+                <!-- TIMEZONES -->
+
+                <div class="form-group">
+
+                    <label for="timezones">
+                        Zonas Horarias
+                    </label>
+
+                    <input
+                        type="text"
+                        id="timezones"
+                        name="timezones"
+                        placeholder="UTC-03:00, UTC-04:00"
+                        value="<%= oldData?.timezones || '' %>"
+                    >
+
+                    <% if (errors?.timezones) { %>
+
+                        <p class="form-error">
+                            <%= errors.timezones.msg %>
+                        </p>
+
+                    <% } %>
+
+                </div>
+
+                <!-- CREADOR -->
+
+                <div class="form-group">
+
+                    <label for="creador">
+                        Creador
+                    </label>
+
+                    <input
+                        type="text"
+                        id="creador"
+                        name="creador"
+                        placeholder="Tu nombre"
+                        value="<%= oldData?.creador || '' %>"
+                    >
+
+                    <% if (errors?.creador) { %>
+
+                        <p class="form-error">
+                            <%= errors.creador.msg %>
+                        </p>
+
+                    <% } %>
+
+                </div>
+
+                <!-- BOTONES -->
+
+                <div class="form-actions">
+
+                    <button
+                        type="submit"
+                        class="btn-primary"
+                    >
+
+                        Guardar País
+
+                    </button>
+
+                    <a
+                        href="/countries/dashboard"
+                        class="btn-secondary"
+                    >
+
+                        Cancelar
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>

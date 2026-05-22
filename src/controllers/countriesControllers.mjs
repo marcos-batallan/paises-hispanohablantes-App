@@ -1,4 +1,5 @@
 import countryModel from "../models/countryModel.mjs";
+
 import { getSpanishSpeakingCountries } from "../services/countriesService.mjs";
 
 // Crear una instancia del modelo de país
@@ -134,5 +135,3 @@ export const renderDashboard = async (req, res) => {
         });
     }
 };
-
-

@@ -2,6 +2,8 @@
 
     <div class="container">
 
+        <!-- HEADER -->
+
         <div class="dashboard-header">
 
             <div>
@@ -12,13 +14,17 @@
 
                 <p class="dashboard-subtitle">
 
-                    Gestión completa de países hispanohablantes
+                    Gestión de países hispanohablantes
+                    de América
 
                 </p>
 
             </div>
 
-            <a href="/countries/create" class="btn-primary">
+            <a
+                href="/countries/create"
+                class="btn-primary"
+            >
 
                 + Nuevo País
 
@@ -26,73 +32,195 @@
 
         </div>
 
-        <div class="countries-grid">
+        <!-- TABLE WRAPPER -->
 
-            <% countries.forEach(country => { %>
+        <div class="table-wrapper">
 
-                <article class="country-card">
+            <table class="countries-table">
 
-                    <img
-                        src="<%= country.flag %>"
-                        alt="<%= country.name %>"
-                        class="country-flag"
-                    >
+                <thead>
 
-                    <div class="country-content">
+                    <tr>
 
-                        <h2>
-                            <%= country.name %>
-                        </h2>
+                        <th>Bandera</th>
+                        <th>País</th>
+                        <th>Capital</th>
+                        <th>Fronteras</th>
+                        <th>Área</th>
+                        <th>Población</th>
+                        <th>Gini</th>
+                        <th>Timezones</th>
+                        <th>Creador</th>
+                        <th>Acciones</th>
 
-                        <p>
-                            <strong>Capital:</strong>
-                            <%= country.capital %>
-                        </p>
+                    </tr>
 
-                        <p>
-                            <strong>Región:</strong>
-                            <%= country.region %>
-                        </p>
+                </thead>
 
-                        <p>
-                            <strong>Creador:</strong>
-                            <%= country.creador %>
-                        </p>
+                <tbody>
 
-                    </div>
+                    <% countries.forEach(country => { %>
 
-                    <div class="country-actions">
+                        <tr>
 
-                        <a
-                            href="/countries/edit/<%= country._id %>"
-                            class="btn-secondary"
-                        >
+                            <!-- FLAG -->
 
-                            Editar
+                            <td>
 
-                        </a>
+                                <img
+                                    src="<%= country.flag %>"
+                                    alt="<%= country.name %>"
+                                    class="table-flag"
+                                >
 
-                        <form
-                            action="/countries/<%= country._id %>?_method=DELETE"
-                            method="POST"
-                        >
+                            </td>
 
-                            <button
-                                type="submit"
-                                class="btn-delete"
-                            >
+                            <!-- NAME -->
 
-                                Eliminar
+                            <td class="country-name">
 
-                            </button>
+                                <%= country.name %>
 
-                        </form>
+                            </td>
 
-                    </div>
+                            <!-- CAPITAL -->
 
-                </article>
+                            <td>
 
-            <% }) %>
+                                <%= country.capital || 'N/A' %>
+
+                            </td>
+
+                            <!-- BORDERS -->
+
+                            <td>
+
+                                <div class="badge-group">
+
+                                    <% if(country.borders?.length) { %>
+
+                                        <% country.borders.forEach(border => { %>
+
+                                            <span class="table-badge">
+
+                                                <%= border %>
+
+                                            </span>
+
+                                        <% }) %>
+
+                                    <% } else { %>
+
+                                        <span class="text-muted">
+
+                                            Sin datos
+
+                                        </span>
+
+                                    <% } %>
+
+                                </div>
+
+                            </td>
+
+                            <!-- AREA -->
+
+                            <td>
+
+                                <%= country.area?.toLocaleString() || 'N/A' %> km²
+
+                            </td>
+
+                            <!-- POPULATION -->
+
+                            <td>
+
+                                <%= country.population?.toLocaleString() || 'N/A' %>
+
+                            </td>
+
+                            <!-- GINI -->
+
+                            <td>
+
+                                <%= country.gini || 'N/A' %>
+
+                            </td>
+
+                            <!-- TIMEZONES -->
+
+                            <td>
+
+                                <div class="badge-group">
+
+                                    <% if(country.timezones?.length) { %>
+
+                                        <% country.timezones.forEach(zone => { %>
+
+                                            <span class="table-badge timezone">
+
+                                                <%= zone %>
+
+                                            </span>
+
+                                        <% }) %>
+
+                                    <% } %>
+
+                                </div>
+
+                            </td>
+
+                            <!-- CREADOR -->
+
+                            <td>
+
+                                <%= country.creador || 'Sistema' %>
+
+                            </td>
+
+                            <!-- ACTIONS -->
+
+                            <td>
+
+                                <div class="table-actions">
+
+                                    <a
+                                        href="/countries/edit/<%= country._id %>"
+                                        class="btn-edit"
+                                    >
+
+                                        Editar
+
+                                    </a>
+
+                                    <form
+                                        action="/countries/<%= country._id %>?_method=DELETE"
+                                        method="POST"
+                                    >
+
+                                        <button
+                                            type="submit"
+                                            class="btn-delete"
+                                        >
+
+                                            Eliminar
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    <% }) %>
+
+                </tbody>
+
+            </table>
 
         </div>
 
