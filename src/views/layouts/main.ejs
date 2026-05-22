@@ -20,15 +20,45 @@
 
 <body>
 
+    <!-- NAVBAR -->
     <%- include('../partials/navbar') %>
 
+    <!-- CONTENIDO DINÁMICO -->
     <main>
-
+    
         <%- body %>
 
     </main>
 
+    <!-- FOOTER -->
     <%- include('../partials/footer') %>
+
+    <!-- SCRIPT MENU MOBILE -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const menuToggle =
+            document.getElementById('menu-toggle');
+
+        const navLinks =
+            document.getElementById('nav-links');
+
+        console.log(menuToggle);
+        console.log(navLinks);
+
+        if (menuToggle && navLinks) {
+
+            menuToggle.addEventListener('click', () => {
+
+                navLinks.classList.toggle('active');
+
+            });
+
+        }
+
+    });
+
+    </script>
 
 </body>
 
