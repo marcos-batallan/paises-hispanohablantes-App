@@ -1,0 +1,97 @@
+# 🌍 Countries App
+
+Aplicación web para la gestión de países, desarrollada con Node.js, Express y MongoDB. Permite crear, editar, listar y eliminar países con validaciones, interfaz dinámica y feedback visual personalizado.
+
+---
+
+## Objetivos del proyecto
+
+- Implementar una aplicación CRUD completa con Node.js y Express.
+- Aplicar validaciones de formularios con express-validator.
+- Manejar persistencia de datos con MongoDB y Mongoose.
+- Construir vistas dinámicas con EJS.
+- Mejorar la experiencia de usuario con feedback visual personalizado.
+- Practicar buenas prácticas de organización de código (controllers, routes, models, services).
+
+---
+
+## 🛠️ Tecnologías utilizadas
+
+- Node.js
+- Express.js
+- MongoDB + Mongoose
+- EJS (templating engine)
+- express-validator
+- method-override
+- CSS personalizado (variables y diseño moderno)
+- JavaScript (frontend básico)
+
+---
+
+## 📦 Instalación del proyecto
+
+1. Clonar el repositorio
+
+```bash
+git clone https://github.com/marcos-batallan/paises-hispanohablantes-App.git
+
+
+2. Entrar al proyecto
+
+cd paises-hispanohablantes-App
+
+
+3. Instalar dependencias
+npm install
+
+
+⚙️ Configuración de variables de entorno
+
+4. Crear un archivo .env en la raíz del proyecto con las siguientes variables:
+PORT=3000
+MONGODB_URI=mongodb+srv://grupo-xx:grupo-xx@cluster0.blryo.mongodb.net/NodeMod3Cohorte5
+
+5. Ejecutar el proyecto
+
+--- Modo desarrollo
+npm run dev
+
+--- Modo producción
+npm start
+
+
+🌐 Funcionalidades
+📋 Listado de países
+➕ Creación de países
+✏️ Edición de países
+❌ Eliminación con confirmación personalizada
+⚠️ Feedback visual (Success, error, warning)
+🔎 Validación de formularios en backend
+🌍 Manejo de fronteras y zonas horarias
+
+
+Consideraciones especiales
+🔹 Validaciones
+Se implementan validaciones con express-validator tanto en creación como en edición de países.
+
+🔹 Formato de datos
+borders: se ingresan como string separado por comas y se transforman en array.
+timezones: se ingresan como string y se normalizan a formato estándar UTC.
+
+🔹 Seguridad y consistencia
+Validación en backend obligatoria (no depende del frontend).
+Uso de runValidators en Mongoose para asegurar integridad de datos.
+
+🔹 UI / UX
+Feedback personalizado en lugar de alertas del navegador.
+Pantalla de confirmación para eliminación de países.
+Estilos basados en variables CSS globales.
+
+
+✨ Mejoras futuras
+Filtros de búsqueda por país
+Paginación del dashboard
+
+
+Autor
+Desarrollado por Marcos Batallan

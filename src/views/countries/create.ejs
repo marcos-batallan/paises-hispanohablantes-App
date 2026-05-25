@@ -50,15 +50,16 @@
                         type="text"
                         id="name"
                         name="name"
-                        placeholder="Ej: República Argentina"
+                        placeholder="Ej: Argentina"
                         value="<%= oldData?.name || '' %>"
+                        class="<%= errors?.name ? 'input-error' : '' %>"
                     >
 
                     <% if (errors?.name) { %>
 
-                        <p class="form-error">
+                        <span class="form-error">
                             <%= errors.name.msg %>
-                        </p>
+                        </span>
 
                     <% } %>
 
@@ -78,6 +79,7 @@
                         name="capital"
                         placeholder="Ej: Buenos Aires"
                         value="<%= oldData?.capital || '' %>"
+                        class="<%= errors?.capital ? 'input-error' : '' %>"
                     >
 
                     <% if (errors?.capital) { %>
@@ -104,6 +106,7 @@
                         name="borders"
                         placeholder="ARG, BRA, CHL"
                         value="<%= oldData?.borders || '' %>"
+                        class="<%= errors?.borders ? 'input-error' : '' %>"
                     >
 
                     <small class="form-help">
@@ -136,6 +139,7 @@
                         name="area"
                         placeholder="Ej: 2780400"
                         value="<%= oldData?.area || '' %>"
+                        class="<%= errors?.area ? 'input-error' : '' %>"
                     >
 
                     <% if (errors?.area) { %>
@@ -162,6 +166,7 @@
                         name="population"
                         placeholder="Ej: 46000000"
                         value="<%= oldData?.population || '' %>"
+                        class="<%= errors?.population ? 'input-error' : '' %>"
                     >
 
                     <% if (errors?.population) { %>
@@ -189,6 +194,7 @@
                         name="gini"
                         placeholder="Ej: 42.3"
                         value="<%= oldData?.gini || '' %>"
+                        class="<%= errors?.gini ? 'input-error' : '' %>"
                     >
 
                     <% if (errors?.gini) { %>
@@ -215,6 +221,7 @@
                         name="timezones"
                         placeholder="UTC-03:00, UTC-04:00"
                         value="<%= oldData?.timezones || '' %>"
+                        class="<%= errors?.timezones ? 'input-error' : '' %>"
                     >
 
                     <% if (errors?.timezones) { %>
@@ -241,6 +248,7 @@
                         name="creador"
                         placeholder="Tu nombre"
                         value="<%= oldData?.creador || '' %>"
+                        class="<%= errors?.creador ? 'input-error' : '' %>"
                     >
 
                     <% if (errors?.creador) { %>
@@ -267,7 +275,7 @@
                     </button>
 
                     <a
-                        href="/countries/dashboard"
+                        href="/countries"
                         class="btn-secondary"
                     >
 

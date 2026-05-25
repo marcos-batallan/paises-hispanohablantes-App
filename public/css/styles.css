@@ -400,6 +400,11 @@ a {
 }
 
 /* TABLE */
+table th {
+    text-align: center;
+    vertical-align: middle;
+}
+
 .countries-table {
     width: 100%;
     border-collapse: collapse;
@@ -449,6 +454,7 @@ a {
 }
 
 /* FLAG */
+/*
 .table-flag {
     width: 58px;
     height: 38px;
@@ -459,6 +465,7 @@ a {
     box-shadow:
         0 0 14px rgba(0,0,0,0.15);
 }
+*/
 
 /* COUNTRY NAME */
 .country-name {
@@ -902,8 +909,10 @@ a {
 }
 
 .form-error {
-    color: #f87171;
+    color: #fb7185;
     font-size: 0.9rem;
+    margin-top: 0.4rem;
+    display: block;
 }
 
 .form-actions {
@@ -912,6 +921,14 @@ a {
     gap: 1rem;
     margin-top: 1rem;
     flex-wrap: wrap;
+}
+
+.input-error {
+    border: 1px solid #fb7185 !important;
+    box-shadow:
+        0 0 12px rgba(251,113,133,0.25);
+    background:
+        rgba(251,113,133,0.05);
 }
 
 /* MOBILE */

@@ -1,0 +1,179 @@
+<section class="form-section">
+
+    <div class="container">
+
+        <div class="form-card">
+
+            <div class="form-header">
+
+                <h1>
+                    Editar País
+                </h1>
+
+                <p>
+                    Actualiza la información del país
+                </p>
+
+            </div>
+
+            <form
+                action="/countries/<%= country._id %>?_method=PUT"
+                method="POST"
+                class="country-form"
+            >
+
+            <!-- NOMBRE OFICIAL -->
+            <div class="form-group">
+
+                <label for="name">
+                    Nombre oficial
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Ej: República Argentina"
+                    value="<%= oldData?.name || '' %>"
+                    class="<%= errors?.name ? 'input-error' : '' %>"
+                >
+
+                <% if (errors?.name) { %>
+
+                    <span class="form-error">
+                        <%= errors.name.msg %>
+                    </span>
+
+                <% } %>
+
+            </div>
+
+            <!-- CAPITAL -->
+            <div class="form-group">
+
+                <label for="capital">
+                    Capital
+                </label>
+
+                <input
+                    type="text"
+                    id="capital"
+                    name="capital"
+                    placeholder="Ej: Buenos Aires"
+                    value="<%= oldData?.capital || '' %>"
+                    class="<%= errors?.capital ? 'input-error' : '' %>"
+                >
+
+            </div>
+
+            <!-- FRONTERAS -->
+            <div class="form-group">
+
+                <label for="borders">
+                    Fronteras
+                </label>
+
+                <input
+                    type="text"
+                    id="borders"
+                    name="borders"
+                    placeholder="Ej: ARG, BRA, CHL"
+                    value="<%= oldData?.borders || '' %>"
+                    class="<%= errors?.borders ? 'input-error' : '' %>"
+
+                <% if (errors?.borders) { %>
+
+                    <span class="form-error">
+                        <%= errors.borders.msg %>
+                    </span>
+
+                <% } %>
+
+            </div>
+
+            <!-- POBLACIÓN -->
+            <div class="form-group">
+
+                <label for="population">
+                    Población
+                </label>
+
+                <input
+                    type="number"
+                    id="population"
+                    name="population"
+                    placeholder="Ej: 45195777"
+                    value="<%= oldData?.population || '' %>"
+                    class="<%= errors?.population ? 'input-error' : '' %>"
+                >
+
+            </div>
+
+            <!-- ÁREA -->
+            <div class="form-group">
+
+                <label for="area">
+                    Área
+                </label>
+
+                <input
+                    type="number"
+                    id="area"
+                    name="area"
+                    placeholder="Ej: 2780400"
+                    value="<%= oldData?.area || '' %>"
+                    class="<%= errors?.area ? 'input-error' : '' %>"
+                >
+
+            </div>
+
+            <!-- CREADOR -->
+            <div class="form-group">
+
+                <label for="creador">
+                    Creador
+                </label>
+
+                <input
+                    type="text"
+                    id="creador"
+                    name="creador"
+                    placeholder="Tu nombre"
+                    value="<%= oldData?.creador || '' %>"
+                    class="<%= errors?.creador ? 'input-error' : '' %>"
+                    
+                <% if (errors?.creador) { %>
+
+                    <span class="form-error">
+                        <%= errors.creador.msg %>
+                    </span>
+
+                <% } %>
+
+            </div>
+
+            <div class="form-actions">
+
+                <button
+                    type="submit"
+                    class="btn-primary"
+                >
+                    Guardar cambios
+                </button>
+
+                <a
+                    href="/countries"
+                    class="btn-secondary"
+                >
+                    Cancelar
+                </a>
+
+            </div>
+
+          </form>
+
+        </div>
+
+    </div>
+
+</section>

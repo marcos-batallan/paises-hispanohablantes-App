@@ -42,14 +42,13 @@
 
                     <tr>
 
-                        <th>Bandera</th>
                         <th>País</th>
                         <th>Capital</th>
                         <th>Fronteras</th>
                         <th>Área</th>
                         <th>Población</th>
                         <th>Gini</th>
-                        <th>Timezones</th>
+                        <th>Zona Horaria</th>
                         <th>Creador</th>
                         <th>Acciones</th>
 
@@ -63,18 +62,6 @@
 
                         <tr>
 
-                            <!-- FLAG -->
-
-                            <td>
-
-                                <img
-                                    src="<%= country.flag %>"
-                                    alt="<%= country.name %>"
-                                    class="table-flag"
-                                >
-
-                            </td>
-
                             <!-- NAME -->
 
                             <td class="country-name">
@@ -87,7 +74,7 @@
 
                             <td>
 
-                                <%= country.capital || 'N/A' %>
+                                <%= country.capital || 'Sin datos' %>
 
                             </td>
 
@@ -97,7 +84,7 @@
 
                                 <div class="badge-group">
 
-                                    <% if(country.borders?.length) { %>
+                                    <% if(country.borders?.filter(Boolean).length) { %>
 
                                         <% country.borders.forEach(border => { %>
 
@@ -127,7 +114,7 @@
 
                             <td>
 
-                                <%= country.area?.toLocaleString() || 'N/A' %> km²
+                                <%= country.area?.toLocaleString() || 'Sin datos' %> km²
 
                             </td>
 
@@ -135,7 +122,7 @@
 
                             <td>
 
-                                <%= country.population?.toLocaleString() || 'N/A' %>
+                                <%= country.population?.toLocaleString() || 'Sin datos' %>
 
                             </td>
 
@@ -143,7 +130,7 @@
 
                             <td>
 
-                                <%= country.gini || 'N/A' %>
+                                <%= country.gini || 'Sin datos' %>
 
                             </td>
 
@@ -153,7 +140,7 @@
 
                                 <div class="badge-group">
 
-                                    <% if(country.timezones?.length) { %>
+                                    <% if(country.timezones?.filter(Boolean).length) { %>
 
                                         <% country.timezones.forEach(zone => { %>
 
@@ -165,6 +152,15 @@
 
                                         <% }) %>
 
+
+                                    <% } else { %>
+
+                                        <span class="text-muted">
+
+                                            Sin datos
+
+                                        </span>
+
                                     <% } %>
 
                                 </div>
@@ -175,7 +171,7 @@
 
                             <td>
 
-                                <%= country.creador || 'Sistema' %>
+                                <%= country.creador || 'Sin datos' %>
 
                             </td>
 
@@ -202,6 +198,7 @@
                                         <button
                                             type="submit"
                                             class="btn-delete"
+                                            onclick="return confirm('¿Seguro que deseas eliminar este país?')"
                                         >
 
                                             Eliminar

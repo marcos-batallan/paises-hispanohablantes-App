@@ -2,136 +2,280 @@ import countryModel from "../models/countryModel.mjs";
 
 import { getSpanishSpeakingCountries } from "../services/countriesService.mjs";
 
-// Crear una instancia del modelo de país
-export const saveCountries = async (req, res) => {
+import { validationResult } from "express-validator";
+
+
+// Controller para renderizar el dashboard con la lista de países
+export const renderDashboard = async (req, res) => {
+
     try {
 
-        // Obtener los países hispanohablantes de América desde la API
-        const countries = await getSpanishSpeakingCountries();
-        // Guardar cada país en la base de datos, evitando duplicados por nombre y creador
-        for (const country of countries) {
+        const countries = await countryModel.find({
 
-            await countryModel.updateOne(
+            capital: {
+                $exists: true,
+                $ne: ''
+            }
+
+        })
+        .sort({ name: 1 });
+
+        res.render(
+            'countries/dashboard',
+            {
+                title: 'Dashboard',
+                countries
+            }
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).render(
+            'feedback/feedback',
+            {
+                type: 'error',
+                title: 'Error inesperado',
+                message: 'No se pudo cargar el dashboard.',
+                redirect: '/countries'
+            }
+        );
+
+    }
+
+};
+
+// Controller para renderizar el formulario de creación
+export const renderCreate = (req, res) => {
+
+    res.render(
+        'countries/create',
+        {
+            title: 'Crear País',
+            oldData: {},
+            errors: {}
+        }
+    );
+
+};
+
+
+// Controller para manejar la creación de un nuevo país
+export const createCountry = async (req, res) => {
+
+    // VALIDACIONES //
+
+    const errors = validationResult(req);
+
+    // Si hay errores
+    if (!errors.isEmpty()) {
+
+        return res.render(
+            'countries/create',
+            {
+                title: 'Crear País',
+                // Mantener valores escritos
+                oldData: req.body,
+                // Errores organizados por campo
+                errors: errors.mapped()
+            }
+        );
+    }
+
+    // TRANSFORMAR ARRAYS //
+
+    if (req.body.borders) {
+        req.body.borders = req.body.borders
+            .split(',') // Convertir la cadena en un array usando la coma como separador
+            .map(border => border.trim()) // Eliminar espacios extra
+            .filter(border => border !== ''); // Eliminar entradas vacías
+    }
+
+    if (req.body.timezones) {
+        req.body.timezones = req.body.timezones
+            .split(',')
+            .map(tz => tz.trim()) // Eliminar espacios extra
+            .filter(tz => tz !== ''); // Eliminar entradas vacías
+    }
+
+    // GUARDAR EN DB // 
+
+    try {
+
+        await countryModel.create(req.body);
+
+        res.render(
+            'feedback/feedback',
+            {
+                type: 'success',
+                title: 'País creado',
+                message: 'El país fue agregado correctamente.',
+                redirect: '/countries'
+            }
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).render(
+            'feedback/feedback',
+            {
+                type: 'error',
+                title: 'Error al crear',
+                message: 'No se pudo guardar el país.',
+                redirect: '/countries/create'
+            }
+        );
+
+    }
+
+};
+
+
+// Controller para manejar la actualización de un país existente
+export const updateCountry = async (req, res) => {
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.render('countries/edit', {
+            title: 'Editar País',
+            country: { _id: req.params.id },
+            oldData: req.body,
+            errors: errors.mapped()
+        });
+    }
+
+    try {
+
+        const { id } = req.params;
+
+        await countryModel.findByIdAndUpdate(
+            id,
+            req.body,
+            {
+                new: true,
+                runValidators: true
+            }
+        );
+
+        res.render(
+            'feedback/feedback',
+            {
+                type: 'success',
+                title: 'País actualizado',
+                message: 'Los datos fueron actualizados correctamente.',
+                redirect: '/countries'
+            }
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).render(
+            'feedback/feedback',
+            {
+                type: 'error',
+                title: 'Error al actualizar',
+                message: 'No se pudo actualizar el país.',
+                redirect: '/countries'
+            }
+        );
+
+    }
+
+};
+
+
+// Controller para renderizar el formulario de edición
+export const renderEdit = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        const country = await countryModel.findById(id);
+
+        if (!country) {
+
+            return res.status(404).render(
+                'feedback/feedback',
                 {
-                    name: country.name,
-                    creador: null // Aquí se puede reemplazar con el ID, Nombre o Nick del usuario autenticado si se implementa autenticación
-                },
-                {
-                    ...country, // Usar el operador spread para mantener la estructura del país y agregar el campo creador
-                    creador: null
-                },
-                {
-                    upsert: true // La opción upsert: true permite crear un nuevo documento si no existe uno que coincida con el filtro
+                    type: 'error',
+                    title: 'País no encontrado',
+                    message: 'El país solicitado no existe.',
+                    redirect: '/countries'
                 }
             );
-        }
-        // Devolver una respuesta indicando que los países se han guardado correctamente
-        res.status(200).json({ message: "Países guardados correctamente" });
 
-    } catch (error) {
-        console.error(error);
-
-        // Devolver una respuesta de error si ocurre algún problema al guardar los países
-        res.status(500).json({
-            message: "Error al guardar los países",
-            error: error.message,
-        });
-    }
-};
-
-// Controlador para obtener lista de todos los países almacenados en la base de datos (JSON)
-export const getAllCountries = async (req, res) => {
-    try {
-        // Obtener todos los países de la base de datos
-        const countries = await countryModel.find();
-        // Devolver la lista de países en la respuesta
-        res.status(200).json(countries);
-
-    } catch (error) {
-        console.error(error);
-
-        // Devolver una respuesta de error si ocurre algún problema al obtener los países
-        res.status(500).json({
-            message: "Error al obtener los países",
-            error: error.message,
-        });
-    }
-};
-
-// Controlador para actualizar un país por su ID (JSON)
-export const updateCountry = async (req, res) => {
-    try {
-        // Obtener el ID del país a actualizar desde los parámetros de la ruta
-        const { id } = req.params;
-        // Actualizar el país en la base de datos con los datos proporcionados en el cuerpo de la solicitud
-        const updatedCountry = await countryModel.findByIdAndUpdate(id, req.body, {
-            // La opción new: true devuelve el documento actualizado en lugar del original
-            new: true,
-            // La opción runValidators: true asegura que se apliquen las validaciones definidas en el esquema del modelo al actualizar el documento
-            runValidators: true
-        });
-
-        if (!updatedCountry) {
-            return res.status(404).json({ message: "País no encontrado" });
         }
 
-        res.status(200).json(updatedCountry);
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            message: "Error al actualizar el país",
-            error: error.message
-        });
-    }
-};
-
-// Controlador para eliminar un país por su ID (JSON)
-export const deleteCountry = async (req, res) => {
-    try {
-        // Obtener el ID del país a eliminar desde los parámetros de la ruta
-        const { id } = req.params;
-        // Eliminar el país de la base de datos por su ID
-        const deletedCountry = await countryModel.findByIdAndDelete(id);
-
-        if (!deletedCountry) {
-            return res.status(404).json({ message: "País no encontrado" });
-        }
-
-        res.status(200).json({ message: "País eliminado correctamente" });
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            message: "Error al eliminar el país",
-            error: error.message
-        });
-    }
-};
-
-// Controlador para renderizar el dashboard con la lista de países (HTML)
-export const renderDashboard = async (req, res) => {
-    try {
-        // Obtener todos los países de la base de datos, ordenados por nombre
-        const countries = await countryModel.find(
+        res.render(
+            'countries/edit',
             {
-                capital: { $exists: true, $ne: '' } // Filtrar países que tienen un campo capital definido y no vacío  }
-            })
-            .sort({ name: 1 }); // Ordenar por nombre de país en orden ascendente
-
-            // Renderizar la vista del dashboard con la lista de países
-            res.render("countries/dashboard", {
-                title: "Dashboard",
-                countries
-            });
+                title: 'Editar País',
+                country,
+                oldData: country,
+                errors: {}
+            }
+        );
 
     } catch (error) {
-        // Manejar errores y renderizar una vista de error si ocurre algún problema al cargar el dashboard
-        res.status(500).render('feedback/feedback', {
-            type: 'error',
-            title: 'Error inesperado',
-            message: 'No se pudo completar la operación.',
-            redirect: '/countries/dashboard'
-        });
+
+        console.error(error);
+
+        res.status(500).render(
+            'feedback/feedback',
+            {
+                type: 'error',
+                title: 'Error inesperado',
+                message: 'No se pudo cargar el formulario.',
+                redirect: '/countries'
+            }
+        );
+
     }
+
 };
+
+
+// Controller para eliminar un país
+export const deleteCountry = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        await countryModel.findByIdAndDelete(id);
+
+        res.render(
+            'feedback/feedback',
+            {
+                type: 'success',
+                title: 'País eliminado',
+                message: 'El país fue eliminado correctamente.',
+                redirect: '/countries'
+            }
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).render(
+            'feedback/feedback',
+            {
+                type: 'error',
+                title: 'Error al eliminar',
+                message: 'No se pudo eliminar el país.',
+                redirect: '/countries'
+            }
+        );
+
+    }
+
+};
+
