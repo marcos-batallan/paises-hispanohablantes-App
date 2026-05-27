@@ -296,8 +296,8 @@ npm start
 
 ```json
 "scripts": {
-  "start": "node src/server.mjs",
-  "dev": "nodemon src/server.mjs"
+  "start": "node server.mjs",
+  "dev": "nodemon server.mjs"
 }
 ```
 
