@@ -1,97 +1,343 @@
-# 🌍 Countries App
 
-Aplicación web para la gestión de países, desarrollada con Node.js, Express y MongoDB. Permite crear, editar, listar y eliminar países con validaciones, interfaz dinámica y feedback visual personalizado.
+<h1 align="center">
+  🌎 Países Hispanohablantes
+</h1>
 
----
+<p align="center">
+  Aplicación Full Stack desarrollada con Node.js, Express, MongoDB y EJS.
+</p>
+Proyecto integrador para la **Diplomatura Universitaria en Desarrollo Web Full Stack** dictada por el **Nodo Tecnológico de Catamarca**.
 
-## Objetivos del proyecto
-
-- Implementar una aplicación CRUD completa con Node.js y Express.
-- Aplicar validaciones de formularios con express-validator.
-- Manejar persistencia de datos con MongoDB y Mongoose.
-- Construir vistas dinámicas con EJS.
-- Mejorar la experiencia de usuario con feedback visual personalizado.
-- Practicar buenas prácticas de organización de código (controllers, routes, models, services).
+La aplicación permite visualizar, administrar y gestionar información de países hispanohablantes mediante operaciones CRUD completas, validaciones avanzadas y un dashboard interactivo.
 
 ---
 
-## 🛠️ Tecnologías utilizadas
+# Objetivos del Proyecto
+
+- Consumir información desde una API externa.
+- Persistir datos en MongoDB.
+- Implementar operaciones CRUD completas.
+- Aplicar validaciones robustas en frontend y backend.
+- Construir un dashboard dinámico y responsive.
+- Implementar filtros, estadísticas y exportación de datos.
+- Utilizar arquitectura MVC en Node.js + Express.
+
+---
+
+# 🛠 Tecnologías Utilizadas
+
+## Backend 
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 
 - Node.js
 - Express.js
-- MongoDB + Mongoose
-- EJS (templating engine)
+- MongoDB
+- Mongoose
 - express-validator
 - method-override
-- CSS personalizado (variables y diseño moderno)
-- JavaScript (frontend básico)
+- Morgan
+
+## Frontend
+![EJS](https://img.shields.io/badge/EJS-B4CA65?style=for-the-badge)
+
+- EJS
+- CSS3
+- Flexbox
+- CSS Grid
+- Responsive Design
+- Glassmorphism UI
+
+## Herramientas
+
+- Git
+- GitHub
+- VS Code
+- Render (deploy)
 
 ---
 
-## 📦 Instalación del proyecto
+# Características Principales
 
-1. Clonar el repositorio
+✅ Dashboard interactivo  
+✅ CRUD completo de países  
+✅ Validaciones frontend y backend  
+✅ Responsive Design  
+✅ Búsqueda y filtros dinámicos  
+✅ Paginación  
+✅ Exportación CSV  
+✅ Cálculo de promedio Gini  
+✅ Feedback visual de operaciones  
+✅ Arquitectura MVC  
+✅ Manejo de errores y validaciones robustas  
+
+---
+
+# Funcionalidades CRUD
+
+## Crear País
+
+Permite agregar nuevos países mediante formulario validado.
+
+### Validaciones implementadas
+
+- Nombre obligatorio
+- Capital obligatoria
+- Área positiva
+- Población entera positiva
+- Gini entre 0 y 100
+- Borders con formato ISO (`ARG, BRA, CHL`)
+- Manejo de arrays y transformación de datos
+
+---
+
+## Editar País
+
+Permite actualizar registros existentes conservando validaciones y feedback visual.
+
+---
+
+## Eliminar País
+
+Incluye confirmación y feedback posterior a la operación.
+
+---
+
+# Dashboard Avanzado
+
+El dashboard incorpora:
+
+- Tabla responsive
+- Búsqueda por nombre
+- Filtro por capital
+- Filtro por región
+- Rango de población
+- Paginación
+- Estadísticas
+- Promedio Gini
+- Exportación CSV
+
+---
+
+# Validaciones Implementadas
+
+Las validaciones se aplican en múltiples niveles:
+
+## 1️⃣ Mongoose Schema
+
+Validaciones a nivel de modelo:
+
+- minlength
+- maxlength
+- regex
+- rangos numéricos
+- arrays
+- required
+- sanitización
+
+---
+
+## 2️⃣ express-validator
+
+Validaciones a nivel de rutas/controladores:
+
+- `.notEmpty()`
+- `.isLength()`
+- `.isFloat()`
+- `.isInt()`
+- `.matches()`
+- `.optional()`
+
+---
+
+## 3️⃣ Interfaz de Usuario
+
+- Mensajes de error claros
+- Conservación de datos ingresados
+- Inputs destacados visualmente
+- Feedback dinámico
+
+---
+
+# 📁 Estructura del Proyecto
+
+```bash
+public/
+│
+├── css/
+│   └── styles.css
+│
+├── images/
+│   ├── background/
+│   ├── icons/
+│   └── readme/
+│
+src/
+│
+├── config/
+│   └── dbConfig.mjs
+│
+├── controllers/
+│   └── countriesControllers.mjs
+│
+├── models/
+│   └── countryModel.mjs
+│
+├── routes/
+│   └── countriesRoutes.mjs
+│
+├── services/
+│   └── countriesService.mjs
+│
+├── validators/
+│   └── countryValidator.mjs
+│
+├── views/
+│   ├── layouts/
+│   ├── countries/
+│   └── feedback/
+│
+├── app.mjs
+└── server.mjs
+```
+
+---
+
+# 📸 Capturas de Pantalla
+
+## Landing Page
+
+<p align="center">
+  <img
+    src="./public/images/screenshots/landing-desktop.png"
+    width="900"
+  >
+</p>
+
+---
+
+## Dashboard
+
+<p align="center">
+  <img
+    src="./public/images/screenshots/dashboard-desktop.png"
+    width="900"
+  >
+</p>
+
+---
+
+## About
+
+<p align="center">
+  <img
+    src="./public/images/screenshots/about-desktop.png"
+    width="900"
+  >
+</p>
+
+---
+
+## Contacto
+
+<p align="center">
+  <img
+    src="./public/images/screenshots/contact-desktop.png"
+    width="900"
+  >
+</p>
+
+
+# Instalación y Ejecución
+
+## 1️⃣ Clonar repositorio
 
 ```bash
 git clone https://github.com/marcos-batallan/paises-hispanohablantes-App.git
+```
 
+---
 
-2. Entrar al proyecto
+## 2️⃣ Instalar dependencias
 
-cd paises-hispanohablantes-App
-
-
-3. Instalar dependencias
+```bash
 npm install
+```
 
+---
 
-⚙️ Configuración de variables de entorno
+## 3️⃣ Configurar variables de entorno
 
-4. Crear un archivo .env en la raíz del proyecto con las siguientes variables:
+Crear archivo `.env`
+
+```env
 PORT=3000
 MONGODB_URI=mongodb+srv://grupo-xx:grupo-xx@cluster0.blryo.mongodb.net/NodeMod3Cohorte5
+```
 
-5. Ejecutar el proyecto
+---
 
---- Modo desarrollo
+## 4️⃣ Ejecutar proyecto
+
+Modo desarrollo:
+
+```bash
 npm run dev
+```
 
---- Modo producción
+Modo producción:
+
+```bash
 npm start
+```
 
+---
 
-🌐 Funcionalidades
-📋 Listado de países
-➕ Creación de países
-✏️ Edición de países
-❌ Eliminación con confirmación personalizada
-⚠️ Feedback visual (Success, error, warning)
-🔎 Validación de formularios en backend
-🌍 Manejo de fronteras y zonas horarias
+# Scripts Disponibles
 
+```json
+"scripts": {
+  "start": "node src/server.mjs",
+  "dev": "nodemon src/server.mjs"
+}
+```
 
-Consideraciones especiales
-🔹 Validaciones
-Se implementan validaciones con express-validator tanto en creación como en edición de países.
+---
 
-🔹 Formato de datos
-borders: se ingresan como string separado por comas y se transforman en array.
-timezones: se ingresan como string y se normalizan a formato estándar UTC.
+# Base de Datos
 
-🔹 Seguridad y consistencia
-Validación en backend obligatoria (no depende del frontend).
-Uso de runValidators en Mongoose para asegurar integridad de datos.
+La aplicación utiliza MongoDB mediante Mongoose.
 
-🔹 UI / UX
-Feedback personalizado en lugar de alertas del navegador.
-Pantalla de confirmación para eliminación de países.
-Estilos basados en variables CSS globales.
+Los datos se obtienen desde una API externa y luego son persistidos localmente para permitir operaciones CRUD completas.
 
+---
 
-✨ Mejoras futuras
-Filtros de búsqueda por país
-Paginación del dashboard
+# Diseño y UX
 
+La interfaz fue diseñada con enfoque:
 
-Autor
-Desarrollado por Marcos Batallan
+- Responsive First
+- Glassmorphism
+- Dashboard moderno
+- Experiencia visual limpia
+- Navegación intuitiva
+
+---
+
+# Posibles Mejoras Futuras
+
+- Gráficos estadísticos avanzados
+- Cache de API
+- Dark/Light Mode
+
+---
+
+# Autor
+
+Desarrollado por **Marcos Batallán**
+
+Proyecto realizado para la:
+
+**Diplomatura Universitaria en Desarrollo Web Full Stack**  
+Nodo Tecnológico de Catamarca
+
+---

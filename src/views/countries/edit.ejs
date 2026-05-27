@@ -39,11 +39,10 @@
                 >
 
                 <% if (errors?.name) { %>
-
+                    
                     <span class="form-error">
                         <%= errors.name.msg %>
                     </span>
-
                 <% } %>
 
             </div>
@@ -63,6 +62,12 @@
                     value="<%= oldData?.capital || '' %>"
                     class="<%= errors?.capital ? 'input-error' : '' %>"
                 >
+                <% if (errors?.capital) { %>
+
+                    <span class="form-error">
+                        <%= errors.capital.msg %>
+                    </span>
+                <% } %>
 
             </div>
 
@@ -80,13 +85,13 @@
                     placeholder="Ej: ARG, BRA, CHL"
                     value="<%= oldData?.borders || '' %>"
                     class="<%= errors?.borders ? 'input-error' : '' %>"
+                >
 
                 <% if (errors?.borders) { %>
 
                     <span class="form-error">
                         <%= errors.borders.msg %>
                     </span>
-
                 <% } %>
 
             </div>
@@ -107,6 +112,13 @@
                     class="<%= errors?.population ? 'input-error' : '' %>"
                 >
 
+                <% if (errors?.population) { %>
+
+                    <span class="form-error">
+                        <%= errors.population.msg %>
+                    </span>
+                <% } %>
+
             </div>
 
             <!-- ÁREA -->
@@ -125,6 +137,13 @@
                     class="<%= errors?.area ? 'input-error' : '' %>"
                 >
 
+                <% if (errors?.area) { %>
+
+                    <span class="form-error">
+                        <%= errors.area.msg %>
+                    </span>
+                <% } %>
+
             </div>
 
             <!-- CREADOR -->
@@ -141,13 +160,13 @@
                     placeholder="Tu nombre"
                     value="<%= oldData?.creador || '' %>"
                     class="<%= errors?.creador ? 'input-error' : '' %>"
+                >
                     
                 <% if (errors?.creador) { %>
 
                     <span class="form-error">
                         <%= errors.creador.msg %>
                     </span>
-
                 <% } %>
 
             </div>

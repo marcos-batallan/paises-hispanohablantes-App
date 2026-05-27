@@ -25,13 +25,106 @@
                 href="/countries/create"
                 class="btn-primary"
             >
-
-                + Nuevo País
+                <i class="fa-solid fa-plus"></i>
+                Nuevo País
 
             </a>
 
         </div>
 
+        <!-- BÚSQUEDA Y FILTRADO -->
+
+        <form
+            action="/countries"
+            method="GET"
+            class="filters-form"
+        >
+
+            <!-- BUSCAR NOMBRE -->
+
+            <input
+                type="text"
+                name="name"
+                placeholder="Buscar país..."
+                value="<%= filters?.name || '' %>"
+            >
+
+            <!-- CAPITAL -->
+
+            <input
+                type="text"
+                name="capital"
+                placeholder="Capital..."
+                value="<%= filters?.capital || '' %>"
+            >
+
+            <!-- REGIÓN -->
+
+            <select name="region">
+
+                <option value="">
+                    Todas las regiones
+                </option>
+
+                <option
+                    value="Americas"
+                    <%= filters?.region === 'Americas' ? 'selected' : '' %>
+                >
+                    América
+                </option>
+
+                <option
+                    value="Europe"
+                    <%= filters?.region === 'Europe' ? 'selected' : '' %>
+                >
+                    Europa
+                </option>
+
+            </select>
+
+            <!-- POBLACIÓN -->
+
+            <input
+                type="number"
+                name="minPopulation"
+                placeholder="Población mínima"
+                value="<%= filters?.minPopulation || '' %>"
+            >
+
+            <input
+                type="number"
+                name="maxPopulation"
+                placeholder="Población máxima"
+                value="<%= filters?.maxPopulation || '' %>"
+            >
+
+            <button type="submit">
+
+                Filtrar
+
+            </button>
+
+            <a
+                href="/countries"
+                class="clear-filters"
+            >
+
+                Limpiar filtros
+
+            </a>
+
+        </form>
+
+        <a
+            href="/countries/export/csv"
+            class="export-btn"
+        >
+
+            Exportar CSV
+
+        </a>
+
+        
         <!-- TABLE WRAPPER -->
 
         <div class="table-wrapper">
@@ -198,7 +291,6 @@
                                         <button
                                             type="submit"
                                             class="btn-delete"
-                                            onclick="return confirm('¿Seguro que deseas eliminar este país?')"
                                         >
 
                                             Eliminar
@@ -219,8 +311,233 @@
 
             </table>
 
+            </div>
+
+            <div
+                id="delete-modal"
+                class="delete-modal hidden"
+            >
+
+                <div class="delete-modal-content">
+
+                    <h3>
+                        Confirmar eliminación
+                    </h3>
+
+                    <p>
+                        ¿Seguro que deseas eliminar este país?
+                    </p>
+
+                    <div class="delete-modal-actions">
+
+                        <button
+                            id="cancel-delete"
+                            class="btn-secondary"
+                        >
+                            Cancelar
+                        </button>
+
+                        <button
+                            id="confirm-delete"
+                            class="btn-delete"
+                        >
+                            Eliminar
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- PAGINACIÓN -->
+
+            <div class="pagination">
+
+                <% 
+                    const queryParams =
+                        new URLSearchParams(filters);
+                %>
+
+                <!-- BOTÓN ANTERIOR -->
+
+                <% if (page > 1) { %>
+
+                    <% queryParams.set('page', page - 1); %>
+
+                    <a
+                        href="/countries?<%= queryParams.toString() %>"
+                        class="pagination-arrow"
+                    >
+
+                        ←
+
+                    </a>
+
+                <% } %>
+
+                <!-- NÚMEROS -->
+
+                <% for(let i = 1; i <= totalPages; i++) { %>
+
+                    <% queryParams.set('page', i); %>
+
+                    <a
+                        href="/countries?<%= queryParams.toString() %>"
+
+                        class="
+                            pagination-number
+                            <%= page === i ? 'active-page' : '' %>
+                        "
+                    >
+
+                        <%= i %>
+
+                    </a>
+
+                <% } %>
+
+                <!-- BOTÓN SIGUIENTE -->
+
+                <% if (page < totalPages) { %>
+
+                    <% queryParams.set('page', page + 1); %>
+
+                    <a
+                        href="/countries?<%= queryParams.toString() %>"
+                        class="pagination-arrow"
+                    >
+
+                        →
+
+                    </a>
+
+                <% } %>
+
+            </div>
+
+            <!-- RESUMEN -->
+
+            <div class="dashboard-summary">
+
+                <div class="summary-card">
+
+                    <h3>
+
+                        Promedio Gini
+
+                    </h3>
+
+                    <p>
+
+                        <%= averageGini.toFixed(2) %>
+
+                    </p>
+
+                </div>
+
+            </div>
+
         </div>
 
     </div>
+
+        <!-- MODAL DELETE -->
+
+    <div
+        id="delete-modal"
+        class="delete-modal hidden"
+    >
+
+        <div class="delete-modal-content">
+
+            <h3>
+                Confirmar eliminación
+            </h3>
+
+            <p>
+                ¿Seguro que deseas eliminar este país?
+            </p>
+
+            <div class="delete-modal-actions">
+
+                <button
+                    id="cancel-delete"
+                    class="btn-secondary"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    id="confirm-delete"
+                    class="btn-delete"
+                >
+                    Eliminar
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!--  SCRIPT PARA CONFIRMAR ELIMINACIÓN - UX MEJORADA -->
+
+    <script>
+
+        const modal =
+            document.getElementById(
+                'delete-modal'
+            );
+
+        const confirmBtn =
+            document.getElementById(
+                'confirm-delete'
+            );
+
+        const cancelBtn =
+            document.getElementById(
+                'cancel-delete'
+            );
+
+        let currentForm = null;
+
+        document
+            .querySelectorAll('.btn-delete')
+            .forEach(button => {
+
+                button.addEventListener(
+                    'click',
+                    (event) => {
+                        
+                        event.preventDefault();
+
+                        currentForm =
+                            button.closest('form');
+
+                        modal.classList.remove(
+                            'hidden'
+                        );
+                    }
+                );
+            });
+
+        cancelBtn.addEventListener(
+            'click',
+            () => {
+                modal.classList.add(
+                    'hidden'
+                );
+            }
+        );
+
+        confirmBtn.addEventListener(
+            'click',
+            () => {
+                currentForm.submit();
+            }
+        );
+
+    </script>
 
 </section>

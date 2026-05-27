@@ -109,6 +109,9 @@ a {
     color: var(--text-muted);
     text-decoration: none;
     transition: 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .nav-links a:hover {
@@ -117,6 +120,14 @@ a {
     box-shadow:
         0 0 12px rgba(56,189,248,0.25);
     transform: translateY(-2px);
+}
+
+.nav-links a i {
+    transition: transform 0.2s ease;
+}
+
+.nav-links a:hover i {
+    transform: scale(1.15);
 }
 
 /* MENU BUTTON */
@@ -566,6 +577,58 @@ table th {
 }
 
 /* =========================
+DELETE MODAL
+========================= */
+
+.delete-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.hidden {
+    display: none;
+}
+
+.delete-modal-content {
+    background: white;
+    color: #1f2937;
+    padding: 2rem;
+    border-radius: 1rem;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.delete-modal-content h3 {
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.delete-modal-content p {
+    color: #4b5563;
+}
+
+.delete-modal .btn-secondary {
+    background: #e5e7eb;
+    color: #1f2937;
+    border: none;
+}
+
+.delete-modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+/* =========================
    DASHBOARD MOBILE
 ========================= */
 
@@ -584,6 +647,197 @@ table th {
         padding: 1rem;
     }
 }
+
+/* =========================
+   FILTROS Y BÚSQUEDA
+========================= */
+
+.filters-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background:
+        rgba(15, 23, 42, 0.65);
+    border:
+        1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+}
+
+.filters-form input,
+.filters-form select {
+    flex: 1 1 220px;
+    padding: 0.9rem 1rem;
+    border-radius: 12px;
+    border:
+        1px solid rgba(255,255,255,0.08);
+    background:
+        rgba(255,255,255,0.04);
+    color: var(--text);
+    font-size: 0.95rem;
+    outline: none;
+    transition:
+        border 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.filters-form input:focus,
+.filters-form select:focus {
+    border-color: var(--primary);
+    box-shadow:
+        0 0 12px rgba(56,189,248,0.2);
+}
+
+.filters-form button {
+    padding: 0.9rem 1.4rem;
+    border: none;
+    border-radius: 12px;
+    background:
+        linear-gradient(
+            135deg,
+            #38bdf8,
+            #06b6d4
+        );
+
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.filters-form button:hover {
+    transform: translateY(-2px);
+    opacity: 0.92;
+}
+
+.clear-filters {
+    display: flex;
+    align-items: center;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.clear-filters:hover {
+    color: var(--primary);
+}
+
+/* =========================
+   DASHBOARD SUMMARY
+========================= */
+
+.dashboard-summary {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.summary-card {
+    background:
+        rgba(15,23,42,0.7);
+    border:
+        1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 1.5rem;
+    min-width: 220px;
+    backdrop-filter: blur(10px);
+}
+
+.summary-card h3 {
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+}
+
+.summary-card p {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+/* =========================
+   BOTON EXPORTAR CSV
+========================= */
+
+.export-btn {
+    display: inline-flex;
+    margin-bottom: 1rem;
+    padding: 0.9rem 1.2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    background:
+        linear-gradient(
+            135deg,
+            #0ea5e9,
+            #06b6d4
+        );
+    color: white;
+    font-weight: 600;
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.export-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+/* =========================
+   PAGINACIÓN STYLES
+========================= */
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.7rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.pagination a {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    border-radius: 12px;
+    background:
+        rgba(255,255,255,0.05);
+    color: var(--text);
+    transition:
+        all 0.25s ease;
+}
+
+.pagination a:hover {
+    background:
+        rgba(56,189,248,0.2);
+    transform: translateY(-2px);
+}
+
+/* PÁGINA ACTIVA */
+
+.active-page {
+    background:
+        linear-gradient(
+            135deg,
+            #38bdf8,
+            #06b6d4
+        ) !important;
+    color: white !important;
+    font-weight: 700;
+}
+
+/* FLECHAS */
+.pagination-arrow {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
 
 /* =========================
    ABOUT VIEW
@@ -724,6 +978,35 @@ table th {
     .about-grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* =========================
+NODO INFO SECTION
+========================= */
+
+.nodo-card {
+    margin-top: 3rem;
+    text-align: center;
+}
+
+.nodo-logo {
+    width: 240px;
+    height: auto;
+    margin-bottom: 1.5rem;
+}
+
+.nodo-card p {
+    max-width: 700px;
+    margin: 0 auto 2rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+    font-size: 1.1rem;
+}
+
+.nodo-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* =========================

@@ -10,21 +10,144 @@ export const renderDashboard = async (req, res) => {
 
     try {
 
-        const countries = await countryModel.find({
+        // =========================
+        // FILTROS
+        // =========================
 
-            capital: {
-                $exists: true,
-                $ne: ''
+        const {
+            name,
+            capital,
+            region,
+            minPopulation,
+            maxPopulation
+        } = req.query;
+
+        // Query dinámica
+        const filters = {};
+
+        // Nombre
+        if (name) {
+
+            filters.name = {
+                $regex: name,
+                $options: 'i'
+            };
+        }
+
+        // Capital
+        if (capital) {
+
+            filters.capital = {
+                $regex: capital,
+                $options: 'i'
+            };
+        }
+
+        // Región
+        if (region) {
+
+            filters.region = region;
+        }
+
+        // Población
+        if (minPopulation || maxPopulation) {
+
+            filters.population = {};
+
+            if (minPopulation) {
+
+                filters.population.$gte =
+                    Number(minPopulation);
             }
 
-        })
-        .sort({ name: 1 });
+            if (maxPopulation) {
+
+                filters.population.$lte =
+                    Number(maxPopulation);
+            }
+        }
+
+        // =========================
+        // PAGINACIÓN
+        // =========================
+
+        const page =
+            Number(req.query.page) || 1;
+
+        const limit = 10;
+
+        const skip =
+            (page - 1) * limit;
+
+        // =========================
+        // CONSULTA
+        // =========================
+
+        const countries = await countryModel.find(filters)
+
+            .skip(skip)
+
+            .limit(limit)
+
+            .sort({ name: 1 });
+
+        // =========================
+        // TOTAL DE DOCUMENTOS
+        // =========================
+
+        const totalCountries =
+            await countryModel.countDocuments(filters);
+
+        const totalPages =
+            Math.ceil(totalCountries / limit);
+
+        // =========================
+        // PROMEDIO GINI
+        // =========================
+
+        const countriesWithGini =
+            countries.filter(
+                country =>
+                    country.gini !== null
+            );
+
+        let averageGini = 0;
+
+        if (countriesWithGini.length > 0) {
+
+            const totalGini =
+                countriesWithGini.reduce(
+
+                    (accumulator, country) => {
+
+                        return accumulator + country.gini;
+
+                    },
+                    0
+                );
+
+            averageGini =
+                totalGini / countriesWithGini.length;
+        }
+
+        // =========================
+        // RENDER
+        // =========================
 
         res.render(
             'countries/dashboard',
             {
                 title: 'Dashboard',
-                countries
+
+                countries,
+
+                filters: req.query,
+
+                averageGini,
+
+                page,
+
+                totalPages
             }
         );
 
@@ -41,9 +164,7 @@ export const renderDashboard = async (req, res) => {
                 redirect: '/countries'
             }
         );
-
     }
-
 };
 
 // Controller para renderizar el formulario de creación
@@ -85,18 +206,26 @@ export const createCountry = async (req, res) => {
 
     // TRANSFORMAR ARRAYS //
 
-    if (req.body.borders) {
+    if (req.body.borders !== undefined) { // Solo transformar si el campo fue enviado (puede ser vacío)
+
         req.body.borders = req.body.borders
-            .split(',') // Convertir la cadena en un array usando la coma como separador
-            .map(border => border.trim()) // Eliminar espacios extra
-            .filter(border => border !== ''); // Eliminar entradas vacías
+
+            ? req.body.borders
+                .split(',')
+                .map(border => border.trim())
+                .filter(border => border !== '')
+            : [];
     }
 
-    if (req.body.timezones) {
+    if (req.body.timezones !== undefined) {
+
         req.body.timezones = req.body.timezones
-            .split(',')
-            .map(tz => tz.trim()) // Eliminar espacios extra
-            .filter(tz => tz !== ''); // Eliminar entradas vacías
+
+            ? req.body.timezones
+                .split(',')
+                .map(zone => zone.trim())
+                .filter(zone => zone !== '')
+            : [];
     }
 
     // GUARDAR EN DB // 
@@ -137,20 +266,56 @@ export const createCountry = async (req, res) => {
 // Controller para manejar la actualización de un país existente
 export const updateCountry = async (req, res) => {
 
+    // VALIDACIONES //
+
     const errors = validationResult(req);
 
-    if (!errors.isEmpty()) {
-        return res.render('countries/edit', {
-            title: 'Editar País',
-            country: { _id: req.params.id },
-            oldData: req.body,
-            errors: errors.mapped()
-        });
+    // TRANSFORMAR ARRAYS //
+
+    if (req.body.borders !== undefined) { // Solo transformar si el campo fue enviado (puede ser vacío)
+
+        req.body.borders = req.body.borders
+
+            ? req.body.borders
+                .split(',')
+                .map(border => border.trim())
+                .filter(border => border !== '')
+            : []; // Si el campo está vacío, asignar un array vacío
+    }
+
+    if (req.body.timezones !== undefined) {
+
+        req.body.timezones = req.body.timezones
+
+            ? req.body.timezones
+                .split(',')
+                .map(zone => zone.trim())
+                .filter(zone => zone !== '')
+            : [];
     }
 
     try {
 
         const { id } = req.params;
+
+        // SI HAY ERRORES //
+
+        if (!errors.isEmpty()) {
+
+            return res.render(
+                'countries/edit',
+                {
+                    title: 'Editar País',
+                    country: {
+                        _id: id
+                    },
+                    oldData: req.body,
+                    errors: errors.mapped()
+                }
+            );
+        }
+
+        // ACTUALIZAR //
 
         await countryModel.findByIdAndUpdate(
             id,
@@ -166,7 +331,8 @@ export const updateCountry = async (req, res) => {
             {
                 type: 'success',
                 title: 'País actualizado',
-                message: 'Los datos fueron actualizados correctamente.',
+                message:
+                    'Los datos fueron actualizados correctamente.',
                 redirect: '/countries'
             }
         );
@@ -180,13 +346,12 @@ export const updateCountry = async (req, res) => {
             {
                 type: 'error',
                 title: 'Error al actualizar',
-                message: 'No se pudo actualizar el país.',
+                message:
+                    'No se pudo actualizar el país.',
                 redirect: '/countries'
             }
         );
-
     }
-
 };
 
 
@@ -279,3 +444,60 @@ export const deleteCountry = async (req, res) => {
 
 };
 
+
+// Controller para exportar la lista de países a CSV
+export const exportCountriesCSV = async (req, res) => {
+
+    try {
+
+        // Obtener todos los países (sin filtros para exportar todo)
+        const countries =
+            await countryModel.find();
+
+        // Encabezados CSV
+        let csv =
+            'Nombre,Capital,Region,Poblacion,Gini\n';
+
+        // Filas
+        countries.forEach(country => {
+
+            csv +=
+                `"${country.name || ''}",` +
+
+                `"${country.capital || ''}",` +
+
+                `"${country.region || ''}",` +
+
+                `"${country.population || ''}",` +
+
+                `"${country.gini || ''}"\n`;
+
+        });
+
+        // Headers descarga
+        res.header(
+            'Content-Type',
+            'text/csv'
+        );
+
+        // Forzar descarga con nombre de archivo
+        res.attachment('countries.csv');
+        // Enviar el contenido CSV
+        res.send(csv);
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).render(
+            'feedback/feedback',
+            {
+                type: 'error',
+                title: 'Error exportando CSV',
+                message:
+                    'No se pudo exportar el archivo.',
+                redirect: '/countries'
+            }
+        );
+    }
+};

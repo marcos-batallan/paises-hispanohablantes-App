@@ -6,7 +6,8 @@ import {
     createCountry,
     renderEdit,
     updateCountry,
-    deleteCountry
+    deleteCountry,
+    exportCountriesCSV
 } from '../controllers/countriesControllers.mjs';
 
 import { countryValidationRules } from '../validators/countriesValidator.mjs';
@@ -19,6 +20,10 @@ const router = express.Router();
 
 router.get('/',
     renderDashboard
+);
+
+router.get('/export/csv',
+    exportCountriesCSV
 );
 
 /* =========================

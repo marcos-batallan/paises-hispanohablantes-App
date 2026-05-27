@@ -52,7 +52,6 @@ export const countryValidationRules = [
         ),
 
     body('borders')
-        .trim()
         .optional({ values: 'falsy' })
         .matches(/^([A-Z]{3})(,\s?[A-Z]{3})*$/) // Valida que sea una lista de códigos de 3 letras mayúsculas separados por comas
         .withMessage(
