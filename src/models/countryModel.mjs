@@ -148,8 +148,10 @@ countrySchema.index(
   { unique: true }
 );
 
-export default mongoose.model(
+const Country = mongoose.model(
     'Country',
     countrySchema,
     'Grupo-02'
 );
+
+export default Country;

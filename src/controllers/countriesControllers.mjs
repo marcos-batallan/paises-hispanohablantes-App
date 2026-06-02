@@ -1,4 +1,4 @@
-import countryModel from "../models/countryModel.mjs";
+import countriesRepository from "../repositories/countriesRepository.mjs";
 
 import { getSpanishSpeakingCountries } from "../services/countriesService.mjs";
 
@@ -24,6 +24,9 @@ export const renderDashboard = async (req, res) => {
 
         // Query dinámica
         const filters = {};
+
+        // Solo mostrar países creados por el usuario (en este caso, "MarcosBat")
+        filters.creador = 'MarcosBat';
 
         // Nombre
         if (name) {
@@ -83,32 +86,33 @@ export const renderDashboard = async (req, res) => {
         // CONSULTA
         // =========================
 
-        const countries = await countryModel.find(filters)
-
-            .skip(skip)
-
-            .limit(limit)
-
-            .sort({ name: 1 });
+        const countries = await countriesRepository.getAll(
+            filters,
+            { 
+                skip,
+                limit 
+            }
+        );
 
         // =========================
         // TOTAL DE DOCUMENTOS
         // =========================
 
         const totalCountries =
-            await countryModel.countDocuments(filters);
+            await countriesRepository.count(filters);
 
         const totalPages =
-            Math.ceil(totalCountries / limit);
+            Math.ceil(totalCountries / limit); // Redondear hacia arriba para obtener el total de páginas necesarias
 
         // =========================
         // PROMEDIO GINI
         // =========================
-
+        
+        // Filtrar solo los países que tienen un valor de índice Gini definido (no nulo)
         const countriesWithGini =
             countries.filter(
                 country =>
-                    country.gini !== null
+                    country.gini !== null // Asegura que el país tenga un valor de índice Gini definido
             );
 
         let averageGini = 0;
@@ -116,16 +120,17 @@ export const renderDashboard = async (req, res) => {
         if (countriesWithGini.length > 0) {
 
             const totalGini =
-                countriesWithGini.reduce(
+                countriesWithGini.reduce( // Sumar los valores de índice Gini de los países filtrados
 
-                    (accumulator, country) => {
+                    (accumulator, country) => { // El acumulador comienza en 0 y se va sumando el índice Gini de cada país
 
-                        return accumulator + country.gini;
+                        return accumulator + country.gini; // Sumar el índice Gini del país actual al acumulador
 
                     },
-                    0
+                    0 // Valor inicial del acumulador, en este caso 0 para comenzar la suma
                 );
-
+            
+            // Calcular el promedio dividiendo la suma total del índice Gini entre la cantidad de países que tienen ese dato
             averageGini =
                 totalGini / countriesWithGini.length;
         }
@@ -138,15 +143,10 @@ export const renderDashboard = async (req, res) => {
             'countries/dashboard',
             {
                 title: 'Dashboard',
-
                 countries,
-
                 filters: req.query,
-
                 averageGini,
-
                 page,
-
                 totalPages
             }
         );
@@ -232,7 +232,7 @@ export const createCountry = async (req, res) => {
 
     try {
 
-        await countryModel.create(req.body);
+        await countriesRepository.create(req.body);
 
         res.render(
             'feedback/feedback',
@@ -317,13 +317,9 @@ export const updateCountry = async (req, res) => {
 
         // ACTUALIZAR //
 
-        await countryModel.findByIdAndUpdate(
+        await countriesRepository.update(
             id,
-            req.body,
-            {
-                new: true,
-                runValidators: true
-            }
+            req.body
         );
 
         res.render(
@@ -362,7 +358,7 @@ export const renderEdit = async (req, res) => {
 
         const { id } = req.params;
 
-        const country = await countryModel.findById(id);
+        const country = await countriesRepository.getById(id);
 
         if (!country) {
 
@@ -414,7 +410,7 @@ export const deleteCountry = async (req, res) => {
 
         const { id } = req.params;
 
-        await countryModel.findByIdAndDelete(id);
+        await countriesRepository.delete(id);
 
         res.render(
             'feedback/feedback',
@@ -449,28 +445,100 @@ export const deleteCountry = async (req, res) => {
 export const exportCountriesCSV = async (req, res) => {
 
     try {
+        // =========================
+        // FILTROS
+        // =========================
 
-        // Obtener todos los países (sin filtros para exportar todo)
+        const {
+            name,
+            capital,
+            region,
+            minPopulation,
+            maxPopulation
+        } = req.query;
+
+        const filters = {};
+
+        // Solo mis países
+
+        filters.creador = 'MarcosBat';
+
+        // Nombre
+
+        if (name) {
+            filters.name = {
+                $regex: name, // Permite buscar coincidencias parciales en el nombre del país (por ejemplo, "arg" coincidiría con "Argentina")
+                $options: 'i' // Hace que la búsqueda no distinga entre mayúsculas y minúsculas, por lo que "argentina", "Argentina" o "ARGENTINA" serían considerados iguales
+            };
+        }
+
+        // Capital
+
+        if (capital) {
+            filters.capital = {
+                $regex: capital,
+                $options: 'i'
+            };
+        }
+
+        // Región
+
+        if (region) {
+            filters.region = region;
+        }
+
+        // Población
+
+        if (
+            minPopulation || // Si se especifica un valor mínimo o máximo de población, se crea un objeto de filtros para la población
+            maxPopulation
+        ) {
+
+            filters.population = {};
+            if (minPopulation) {
+
+                filters.population.$gte = // El operador $gte (greater than or equal) se utiliza para filtrar países cuya población sea mayor o igual al valor especificado en minPopulation
+                    Number(minPopulation);
+            }
+
+            if (maxPopulation) {
+
+                filters.population.$lte = // El operador $lte (less than or equal) se utiliza para filtrar países cuya población sea menor o igual al valor especificado en maxPopulation
+                    Number(maxPopulation);
+            }
+        }
+
+        // =========================
+        // CONSULTA
+        // =========================
+
         const countries =
-            await countryModel.find();
+            await countriesRepository.getAll(
+                filters
+            );
 
-        // Encabezados CSV
+        // =========================
+        // CSV
+        // =========================
+
         let csv =
-            'Nombre,Capital,Region,Poblacion,Gini\n';
+            'Nombre,Capital,Region,Poblacion,Gini,Creador\n';
 
         // Filas
-        countries.forEach(country => {
+        countries.forEach(Country => {
 
             csv +=
-                `"${country.name || ''}",` +
+                `"${Country.name || ''}",` +
 
-                `"${country.capital || ''}",` +
+                `"${Country.capital || ''}",` +
 
-                `"${country.region || ''}",` +
+                `"${Country.region || ''}",` +
 
-                `"${country.population || ''}",` +
+                `"${Country.population || ''}",` +
 
-                `"${country.gini || ''}"\n`;
+                `"${Country.gini || ''}",` +
+                
+                `"${Country.creador || ''}"\n`;
 
         });
 

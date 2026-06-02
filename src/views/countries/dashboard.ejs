@@ -115,8 +115,13 @@
 
         </form>
 
+        <!-- EXPORTAR CSV con los filtros aplicados tal como están en el dashboard -->
         <a
-            href="/countries/export/csv"
+            href="/countries/export/csv?name=<%= filters?.name || 
+                            '' %>&capital=<%= filters?.capital ||
+                            '' %>&region=<%= filters?.region ||
+                            '' %>&minPopulation=<%= filters?.minPopulation ||
+                            '' %>&maxPopulation=<%= filters?.maxPopulation || '' %>"
             class="export-btn"
         >
 
@@ -313,6 +318,7 @@
 
             </div>
 
+            <!-- BOTÓN ELIMINAR -->
             <div
                 id="delete-modal"
                 class="delete-modal hidden"
@@ -339,7 +345,7 @@
 
                         <button
                             id="confirm-delete"
-                            class="btn-delete"
+                            class="btn-confirm-delete btn-delete"
                         >
                             Eliminar
                         </button>
@@ -470,8 +476,8 @@
 
                 <button
                     id="confirm-delete"
-                    class="btn-delete"
-                >
+                    >
+                    class="btn-confirm-delete btn-delete"
                     Eliminar
                 </button>
 
@@ -503,7 +509,7 @@
         let currentForm = null;
 
         document
-            .querySelectorAll('.btn-delete')
+            .querySelectorAll('.table-actions .btn-delete')
             .forEach(button => {
 
                 button.addEventListener(
