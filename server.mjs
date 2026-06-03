@@ -15,9 +15,20 @@ app.listen(PORT, () => {
 });
 
 // Función de prueba para verificar que la función getSpanishSpeakingCountries funciona correctamente
-const test = async () => {
-  const data = await getSpanishSpeakingCountries();
-  console.log(`Se cargaron ${data.length} países`);
-};
+const checkApiConnection =
+    async () => {
 
-test();
+        console.log(
+            'Verificando conexión con REST Countries...'
+        );
+
+        const data =
+            await getSpanishSpeakingCountries();
+
+        console.log(
+            `REST Countries OK - ${data.length} países disponibles`
+        );
+
+    };
+
+checkApiConnection();

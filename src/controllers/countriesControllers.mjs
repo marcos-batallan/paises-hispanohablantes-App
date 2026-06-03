@@ -1,8 +1,8 @@
+import { validationResult } from "express-validator";
+
 import countriesRepository from "../repositories/countriesRepository.mjs";
 
-import { getSpanishSpeakingCountries } from "../services/countriesService.mjs";
-
-import { validationResult } from "express-validator";
+import { normalizeCountryData } from "../helpers/countriesHelper.mjs";
 
 
 // Controller para renderizar el dashboard con la lista de países
@@ -167,7 +167,8 @@ export const renderDashboard = async (req, res) => {
     }
 };
 
-// Controller para renderizar el formulario de creación
+
+// CONTROLLER PARA RENDERIZAR EL FORMULARIO DE CREACIÓN DE UN NUEVO PAÍS //
 export const renderCreate = (req, res) => {
 
     res.render(
@@ -182,11 +183,10 @@ export const renderCreate = (req, res) => {
 };
 
 
-// Controller para manejar la creación de un nuevo país
+// CONTROLLER PARA CREAR UN NUEVO PAÍS //
 export const createCountry = async (req, res) => {
 
     // VALIDACIONES //
-
     const errors = validationResult(req);
 
     // Si hay errores
@@ -204,35 +204,13 @@ export const createCountry = async (req, res) => {
         );
     }
 
-    // TRANSFORMAR ARRAYS //
-
-    if (req.body.borders !== undefined) { // Solo transformar si el campo fue enviado (puede ser vacío)
-
-        req.body.borders = req.body.borders
-
-            ? req.body.borders
-                .split(',')
-                .map(border => border.trim())
-                .filter(border => border !== '')
-            : [];
-    }
-
-    if (req.body.timezones !== undefined) {
-
-        req.body.timezones = req.body.timezones
-
-            ? req.body.timezones
-                .split(',')
-                .map(zone => zone.trim())
-                .filter(zone => zone !== '')
-            : [];
-    }
+    // Transformar campos 'borders' y 'timezones' en arrays utilizando la función de normalización.
+    const normalizedData = normalizeCountryData(req.body);
 
     // GUARDAR EN DB // 
-
     try {
 
-        await countriesRepository.create(req.body);
+        await countriesRepository.create(normalizedData); // Guardar el país utilizando el repositorio, pasando los datos normalizados.
 
         res.render(
             'feedback/feedback',
@@ -263,43 +241,20 @@ export const createCountry = async (req, res) => {
 };
 
 
-// Controller para manejar la actualización de un país existente
+// CONTROLLER PARA MANEJAR LA ACTUALIZACIÓN DE UN PAÍS EXISTENTE //
 export const updateCountry = async (req, res) => {
 
     // VALIDACIONES //
-
     const errors = validationResult(req);
 
-    // TRANSFORMAR ARRAYS //
-
-    if (req.body.borders !== undefined) { // Solo transformar si el campo fue enviado (puede ser vacío)
-
-        req.body.borders = req.body.borders
-
-            ? req.body.borders
-                .split(',')
-                .map(border => border.trim())
-                .filter(border => border !== '')
-            : []; // Si el campo está vacío, asignar un array vacío
-    }
-
-    if (req.body.timezones !== undefined) {
-
-        req.body.timezones = req.body.timezones
-
-            ? req.body.timezones
-                .split(',')
-                .map(zone => zone.trim())
-                .filter(zone => zone !== '')
-            : [];
-    }
+    // Transformar campos 'borders' y 'timezones' en arrays utilizando la función de normalización.
+    const normalizedData = normalizeCountryData(req.body);
 
     try {
 
         const { id } = req.params;
 
-        // SI HAY ERRORES //
-
+        // Si hay errores de validación, volver a renderizar el formulario de edición con los datos ingresados y los mensajes de error correspondientes.
         if (!errors.isEmpty()) {
 
             return res.render(
@@ -315,11 +270,10 @@ export const updateCountry = async (req, res) => {
             );
         }
 
-        // ACTUALIZAR //
-
+        // Actualizar el país utilizando el repositorio, pasando el ID del país a actualizar y los datos normalizados.
         await countriesRepository.update(
-            id,
-            req.body
+            id, 
+            normalizedData
         );
 
         res.render(
@@ -351,7 +305,7 @@ export const updateCountry = async (req, res) => {
 };
 
 
-// Controller para renderizar el formulario de edición
+// CONTROLLER PARA RENDERIZAR EL FORMULARIO DE EDICIÓN DE UN PAÍS EXISTENTE //
 export const renderEdit = async (req, res) => {
 
     try {
@@ -403,7 +357,7 @@ export const renderEdit = async (req, res) => {
 };
 
 
-// Controller para eliminar un país
+// CONTROLLER PARA ELIMINAR UN PAÍS //
 export const deleteCountry = async (req, res) => {
 
     try {
@@ -411,6 +365,9 @@ export const deleteCountry = async (req, res) => {
         const { id } = req.params;
 
         await countriesRepository.delete(id);
+
+        // Log para confirmar que el país fue eliminado correctamente
+        console.log(`País con ID ${id} eliminado correctamente.`);
 
         res.render(
             'feedback/feedback',
@@ -441,7 +398,7 @@ export const deleteCountry = async (req, res) => {
 };
 
 
-// Controller para exportar la lista de países a CSV
+// CONTROLLER PARA EXPORTAR LOS PAÍSES FILTRADOS A UN ARCHIVO CSV //
 export const exportCountriesCSV = async (req, res) => {
 
     try {
@@ -550,6 +507,10 @@ export const exportCountriesCSV = async (req, res) => {
 
         // Forzar descarga con nombre de archivo
         res.attachment('countries.csv');
+
+        //Log para verificar el contenido del CSV generado
+        console.log(`CSV exportado con ${countries.length} registros`);
+
         // Enviar el contenido CSV
         res.send(csv);
 

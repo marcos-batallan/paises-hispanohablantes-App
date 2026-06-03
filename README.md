@@ -182,6 +182,10 @@ src/
 ├── models/
 │   └── countryModel.mjs
 │
+├── repositories/
+│   ├── countriesRepository.mjs
+│   └── IRepository.mjs
+│
 ├── routes/
 │   └── countriesRoutes.mjs
 │
