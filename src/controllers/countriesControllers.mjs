@@ -2,90 +2,32 @@ import { validationResult } from "express-validator";
 
 import countriesRepository from "../repositories/countriesRepository.mjs";
 
-import { normalizeCountryData } from "../helpers/countriesHelper.mjs";
+import { 
+    normalizeCountryData, 
+    buildCountryFilters,
+    buildPagination
+} from "../helpers/countriesHelper.mjs";
+
+import { 
+    calculateAverageGini,
+    generateCountriesCSV
+} from "../services/countriesService.mjs";
 
 
-// Controller para renderizar el dashboard con la lista de países
+// CONTROLLER PARA RENDERIZAR EL DASHBOARD DE PAÍSES, APLICANDO FILTROS Y PAGINACIÓN //
 export const renderDashboard = async (req, res) => {
 
     try {
 
-        // =========================
-        // FILTROS
-        // =========================
+        // Construir los filtros a partir de los parámetros de consulta utilizando la función helper
+        const filters = buildCountryFilters(req.query) ;
 
-        const {
-            name,
-            capital,
-            region,
-            minPopulation,
-            maxPopulation
-        } = req.query;
 
-        // Query dinámica
-        const filters = {};
+        // Construir las opciones de paginación (page, limit, skip) a partir de los parámetros de consulta utilizando la función helper
+        const { page, limit, skip } = buildPagination(req.query) ;
 
-        // Solo mostrar países creados por el usuario (en este caso, "MarcosBat")
-        filters.creador = 'MarcosBat';
 
-        // Nombre
-        if (name) {
-
-            filters.name = {
-                $regex: name,
-                $options: 'i'
-            };
-        }
-
-        // Capital
-        if (capital) {
-
-            filters.capital = {
-                $regex: capital,
-                $options: 'i'
-            };
-        }
-
-        // Región
-        if (region) {
-
-            filters.region = region;
-        }
-
-        // Población
-        if (minPopulation || maxPopulation) {
-
-            filters.population = {};
-
-            if (minPopulation) {
-
-                filters.population.$gte =
-                    Number(minPopulation);
-            }
-
-            if (maxPopulation) {
-
-                filters.population.$lte =
-                    Number(maxPopulation);
-            }
-        }
-
-        // =========================
-        // PAGINACIÓN
-        // =========================
-
-        const page =
-            Number(req.query.page) || 1;
-
-        const limit = 10;
-
-        const skip =
-            (page - 1) * limit;
-
-        // =========================
-        // CONSULTA
-        // =========================
-
+        // Consultar la base de datos utilizando el repositorio, pasando los filtros y las opciones de paginación (skip y limit)
         const countries = await countriesRepository.getAll(
             filters,
             { 
@@ -94,46 +36,18 @@ export const renderDashboard = async (req, res) => {
             }
         );
 
-        // =========================
-        // TOTAL DE DOCUMENTOS
-        // =========================
-
+        // Contar el total de países que coinciden con los filtros para calcular el total de páginas necesarias para la paginación
         const totalCountries =
             await countriesRepository.count(filters);
-
+   
+        // Total de páginas necesarias para mostrar todos los países que coinciden con los filtros.
+        // Podría vivir en el herlper, pero como es algo específico de esta consulta lo dejo aquí por ahora
         const totalPages =
             Math.ceil(totalCountries / limit); // Redondear hacia arriba para obtener el total de páginas necesarias
 
-        // =========================
-        // PROMEDIO GINI
-        // =========================
-        
-        // Filtrar solo los países que tienen un valor de índice Gini definido (no nulo)
-        const countriesWithGini =
-            countries.filter(
-                country =>
-                    country.gini !== null // Asegura que el país tenga un valor de índice Gini definido
-            );
+        // Llamar al servicio para calcular el promedio de Gini
+        const averageGini = calculateAverageGini(countries);
 
-        let averageGini = 0;
-
-        if (countriesWithGini.length > 0) {
-
-            const totalGini =
-                countriesWithGini.reduce( // Sumar los valores de índice Gini de los países filtrados
-
-                    (accumulator, country) => { // El acumulador comienza en 0 y se va sumando el índice Gini de cada país
-
-                        return accumulator + country.gini; // Sumar el índice Gini del país actual al acumulador
-
-                    },
-                    0 // Valor inicial del acumulador, en este caso 0 para comenzar la suma
-                );
-            
-            // Calcular el promedio dividiendo la suma total del índice Gini entre la cantidad de países que tienen ese dato
-            averageGini =
-                totalGini / countriesWithGini.length;
-        }
 
         // =========================
         // RENDER
@@ -254,7 +168,8 @@ export const updateCountry = async (req, res) => {
 
         const { id } = req.params;
 
-        // Si hay errores de validación, volver a renderizar el formulario de edición con los datos ingresados y los mensajes de error correspondientes.
+        // Si hay errores de validación, volver a renderizar el formulario de edición 
+        // con los datos ingresados y los mensajes de error correspondientes.
         if (!errors.isEmpty()) {
 
             return res.render(
@@ -402,110 +317,22 @@ export const deleteCountry = async (req, res) => {
 export const exportCountriesCSV = async (req, res) => {
 
     try {
-        // =========================
-        // FILTROS
-        // =========================
+        // Construir los filtros a partir de los parámetros de consulta utilizando la función helper
+        const filters = buildCountryFilters(req.query);
 
-        const {
-            name,
-            capital,
-            region,
-            minPopulation,
-            maxPopulation
-        } = req.query;
+        // Consultar la base de datos utilizando el repositorio, pasando los filtros aplicados.
+        const countries = await countriesRepository.getAll(filters);
 
-        const filters = {};
+        // Llamar al servicio para generar el CSV a partir de la lista de países filtrados
+        const csv = generateCountriesCSV(countries);
 
-        // Solo mis países
-
-        filters.creador = 'MarcosBat';
-
-        // Nombre
-
-        if (name) {
-            filters.name = {
-                $regex: name, // Permite buscar coincidencias parciales en el nombre del país (por ejemplo, "arg" coincidiría con "Argentina")
-                $options: 'i' // Hace que la búsqueda no distinga entre mayúsculas y minúsculas, por lo que "argentina", "Argentina" o "ARGENTINA" serían considerados iguales
-            };
-        }
-
-        // Capital
-
-        if (capital) {
-            filters.capital = {
-                $regex: capital,
-                $options: 'i'
-            };
-        }
-
-        // Región
-
-        if (region) {
-            filters.region = region;
-        }
-
-        // Población
-
-        if (
-            minPopulation || // Si se especifica un valor mínimo o máximo de población, se crea un objeto de filtros para la población
-            maxPopulation
-        ) {
-
-            filters.population = {};
-            if (minPopulation) {
-
-                filters.population.$gte = // El operador $gte (greater than or equal) se utiliza para filtrar países cuya población sea mayor o igual al valor especificado en minPopulation
-                    Number(minPopulation);
-            }
-
-            if (maxPopulation) {
-
-                filters.population.$lte = // El operador $lte (less than or equal) se utiliza para filtrar países cuya población sea menor o igual al valor especificado en maxPopulation
-                    Number(maxPopulation);
-            }
-        }
-
-        // =========================
-        // CONSULTA
-        // =========================
-
-        const countries =
-            await countriesRepository.getAll(
-                filters
-            );
-
-        // =========================
-        // CSV
-        // =========================
-
-        let csv =
-            'Nombre,Capital,Region,Poblacion,Gini,Creador\n';
-
-        // Filas
-        countries.forEach(Country => {
-
-            csv +=
-                `"${Country.name || ''}",` +
-
-                `"${Country.capital || ''}",` +
-
-                `"${Country.region || ''}",` +
-
-                `"${Country.population || ''}",` +
-
-                `"${Country.gini || ''}",` +
-                
-                `"${Country.creador || ''}"\n`;
-
-        });
-
-        // Headers descarga
+        // Configurar las cabeceras para indicar que se está enviando un archivo CSV
         res.header(
             'Content-Type',
             'text/csv'
         );
 
-        // Forzar descarga con nombre de archivo
+        // Configugar la descarga del archivo con un nombre específico countries.csv
         res.attachment('countries.csv');
 
         //Log para verificar el contenido del CSV generado
