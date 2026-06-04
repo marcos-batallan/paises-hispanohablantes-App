@@ -23,7 +23,7 @@
 
             <a
                 href="/countries/create"
-                class="btn-primary"
+                class="btn btn-primary"
             >
                 <i class="fa-solid fa-plus"></i>
                 Nuevo País
@@ -122,7 +122,7 @@
                             '' %>&region=<%= filters?.region ||
                             '' %>&minPopulation=<%= filters?.minPopulation ||
                             '' %>&maxPopulation=<%= filters?.maxPopulation || '' %>"
-            class="export-btn"
+            class="btn export-btn"
         >
 
             Exportar CSV
@@ -281,7 +281,7 @@
 
                                     <a
                                         href="/countries/edit/<%= country._id %>"
-                                        class="btn-edit"
+                                        class="btn btn-edit"
                                     >
 
                                         Editar
@@ -295,7 +295,7 @@
 
                                         <button
                                             type="submit"
-                                            class="btn-delete"
+                                            class="btn btn-delete"
                                         >
 
                                             Eliminar
@@ -338,14 +338,14 @@
 
                         <button
                             id="cancel-delete"
-                            class="btn-secondary"
+                            class="btn btn-secondary"
                         >
                             Cancelar
                         </button>
 
                         <button
                             id="confirm-delete"
-                            class="btn-confirm-delete btn-delete"
+                            class="btn btn-confirm-delete btn-delete"
                         >
                             Eliminar
                         </button>
@@ -469,15 +469,15 @@
 
                 <button
                     id="cancel-delete"
-                    class="btn-secondary"
+                    class="btn btn-secondary"
                 >
                     Cancelar
                 </button>
 
                 <button
                     id="confirm-delete"
-                    >
-                    class="btn-confirm-delete btn-delete"
+                    class="btn btn-confirm-delete btn-delete"
+                >
                     Eliminar
                 </button>
 
@@ -509,7 +509,7 @@
         let currentForm = null;
 
         document
-            .querySelectorAll('.table-actions .btn-delete')
+            .querySelectorAll('.table-actions .btn .btn-delete')
             .forEach(button => {
 
                 button.addEventListener(

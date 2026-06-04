@@ -36,6 +36,46 @@ body {
     flex-direction: column;
 }
 
+/* =========================
+   GLASS CARD REUTILIZABLE
+========================= */
+.glass-card {
+    background: rgba(30, 41, 59, 0.65);
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 0 30px rgba(0,0,0,0.18);
+    overflow: hidden;
+}
+
+/* =========================
+   BUTTON REUTILIZABLE
+========================= */
+.btn {
+    display: inline-block;
+    padding: 0.9rem 1.2rem;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* =========================
+   BADGE REUTILIZABLE
+========================= */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 1rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* =========================
+   LINKS RESET
+========================= */
 a {
     text-decoration: none;
     color: inherit;
@@ -285,7 +325,6 @@ a {
 ========================= */
 
 .btn-primary {
-    display: inline-block;
     background: linear-gradient(
         135deg,
         var(--primary),
@@ -293,10 +332,6 @@ a {
     );
     color: white;
     text-decoration: none;
-    padding: 1rem 1.5rem;
-    border-radius: var(--border-radius);
-    font-weight: bold;
-    transition: transform 0.3s ease;
 }
 
 .btn-primary:hover {
@@ -304,13 +339,9 @@ a {
 }
 
 .btn-secondary {
-    display: inline-block;
     color: var(--text);
     text-decoration: none;
-    padding: 1rem 1.5rem;
-    border-radius: var(--border-radius);
     border: 1px solid rgba(255,255,255,0.1);
-    transition: 0.3s ease;
 }
 
 .btn-secondary:hover {
@@ -464,20 +495,6 @@ table th {
         rgba(56,189,248,0.06);
 }
 
-/* FLAG */
-/*
-.table-flag {
-    width: 58px;
-    height: 38px;
-    object-fit: cover;
-    border-radius: 8px;
-    border:
-        1px solid rgba(255,255,255,0.08);
-    box-shadow:
-        0 0 14px rgba(0,0,0,0.15);
-}
-*/
-
 /* COUNTRY NAME */
 .country-name {
     font-weight: 700;
@@ -530,13 +547,8 @@ table th {
     background:
         rgba(34,197,94,0.15);
     color: #4ade80;
-    border: none;
-    padding:
-        0.8rem 1rem;
-    border-radius: 12px;
     text-decoration: none;
     font-size: 0.9rem;
-    transition: 0.3s ease;
 }
 
 .btn-edit:hover {
@@ -550,13 +562,7 @@ table th {
     background:
         rgba(239,68,68,0.15);
     color: #f87171;
-    border: none;
-    padding:
-        0.8rem 1rem;
-    border-radius: 12px;
-    cursor: pointer;
     font-size: 0.9rem;
-    transition: 0.3s ease;
 }
 
 .btn-delete:hover {
@@ -764,8 +770,6 @@ DELETE MODAL
 .export-btn {
     display: inline-flex;
     margin-bottom: 1rem;
-    padding: 0.9rem 1.2rem;
-    border-radius: 12px;
     text-decoration: none;
     background:
         linear-gradient(
@@ -774,10 +778,6 @@ DELETE MODAL
             #06b6d4
         );
     color: white;
-    font-weight: 600;
-    transition:
-        transform 0.2s ease,
-        opacity 0.2s ease;
 }
 
 .export-btn:hover {
@@ -893,19 +893,12 @@ DELETE MODAL
 ========================= */
 
 .about-card {
-    background:
-        rgba(30, 41, 59, 0.65);
-    border:
-        1px solid rgba(255,255,255,0.08);
     border-radius: 24px;
     padding: 2rem;
-    backdrop-filter: blur(14px);
     transition:
         transform 0.3s ease,
         border-color 0.3s ease,
         box-shadow 0.3s ease;
-    box-shadow:
-        0 0 20px rgba(0,0,0,0.18);
 }
 
 .about-card:hover {
@@ -1022,15 +1015,8 @@ NODO INFO SECTION
 .contact-card {
     width: 100%;
     max-width: 850px;
-    background:
-        rgba(30, 41, 59, 0.65);
-    border:
-        1px solid rgba(255,255,255,0.08);
     border-radius: 28px;
     padding: 3rem;
-    backdrop-filter: blur(14px);
-    box-shadow:
-        0 0 30px rgba(0,0,0,0.18);
     text-align: center;
 }
 
@@ -1132,15 +1118,8 @@ NODO INFO SECTION
     width: 100%;
     max-width: 900px;
     margin: 0 auto;
-    background:
-        rgba(30, 41, 59, 0.6);
-    border:
-        1px solid rgba(255,255,255,0.08);
     border-radius: 28px;
     padding: 3rem;
-    backdrop-filter: blur(14px);
-    box-shadow:
-        0 0 35px rgba(0,0,0,0.2);
 }
 
 .country-form {
@@ -1243,13 +1222,9 @@ NODO INFO SECTION
 .feedback-card {
     width: 100%;
     max-width: 500px;
-    background: rgba(30, 41, 59, 0.7);
-    border: 1px solid rgba(255,255,255,0.08);
-    backdrop-filter: blur(14px);
     border-radius: 24px;
     padding: 3rem 2rem;
     text-align: center;
-    box-shadow: 0 0 30px rgba(0,0,0,0.35);
 }
 
 .feedback-icon {
