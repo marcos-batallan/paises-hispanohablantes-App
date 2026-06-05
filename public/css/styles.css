@@ -19,14 +19,20 @@
     --primary-dark: #0ea5e9;
     --text: #f8fafc;
     --text-muted: #cbd5e1;
-    --border-radius: 16px;
     --container-width: 1400px;
+
+    /* ===== BORDER RADIUS ===== */
+    --radius-sm: 12px;
+    --radius-md: 16px;
+    --radius-card: 20px;
+    --radius-lg: 24px;
+    --radius-xl: 28px;
+    --radius-pill: 999px;
 }
 
 /* =========================
-   BASE
+   BODY BASE
 ========================= */
-
 body {
     font-family: Arial, sans-serif;
     background-color: var(--background);
@@ -54,7 +60,7 @@ body {
     display: inline-block;
     padding: 0.9rem 1.2rem;
     border: none;
-    border-radius: 12px;
+    border-radius: var(--radius-sm);
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -68,7 +74,7 @@ body {
     align-items: center;
     justify-content: center;
     padding: 0.45rem 1rem;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     font-size: 0.85rem;
     font-weight: 600;
 }
@@ -202,7 +208,7 @@ a {
         padding: 1rem;
         background: rgba(15, 23, 42, 0.98);
         border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 16px;
+        border-radius: var(--radius-md);
         backdrop-filter: blur(12px);
         flex-direction: column;
         align-items: flex-start;
@@ -240,13 +246,9 @@ a {
 }
 
 .hero-badge {
-    display: inline-block;
     background: rgba(56, 189, 248, 0.15);
     color: var(--primary);
-    padding: 0.6rem 1rem;
-    border-radius: 999px;
     margin-bottom: 1.5rem;
-    font-size: 1.2rem;
     border: 1px solid rgba(56, 189, 248, 0.2);
 }
 
@@ -431,7 +433,7 @@ a {
 .table-wrapper {
     width: 100%;
     overflow-x: auto;
-    border-radius: 28px;
+    border-radius: var(--radius-xl);
     background:
         rgba(30, 41, 59, 0.55);
     border:
@@ -514,7 +516,7 @@ table th {
     justify-content: center;
     padding:
         0.35rem 0.7rem;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     background:
         rgba(56,189,248,0.12);
     color: var(--primary);
@@ -579,7 +581,7 @@ table th {
 .table-wrapper::-webkit-scrollbar-thumb {
     background:
         rgba(56,189,248,0.25);
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
 }
 
 /* =========================
@@ -604,7 +606,7 @@ DELETE MODAL
     background: white;
     color: #1f2937;
     padding: 2rem;
-    border-radius: 1rem;
+    border-radius: var(--radius-md);
     width: 90%;
     max-width: 400px;
     text-align: center;
@@ -646,7 +648,7 @@ DELETE MODAL
         font-size: 2.2rem;
     }
     .table-wrapper {
-        border-radius: 20px;
+        border-radius: var(--radius-card);
     }
     .countries-table th,
     .countries-table td {
@@ -668,7 +670,7 @@ DELETE MODAL
         rgba(15, 23, 42, 0.65);
     border:
         1px solid rgba(255,255,255,0.08);
-    border-radius: 20px;
+    border-radius: var(--radius-card);
     backdrop-filter: blur(12px);
 }
 
@@ -676,7 +678,7 @@ DELETE MODAL
 .filters-form select {
     flex: 1 1 220px;
     padding: 0.9rem 1rem;
-    border-radius: 12px;
+    border-radius: var(--radius-sm);
     border:
         1px solid rgba(255,255,255,0.08);
     background:
@@ -699,7 +701,7 @@ DELETE MODAL
 .filters-form button {
     padding: 0.9rem 1.4rem;
     border: none;
-    border-radius: 12px;
+    border-radius: var(--radius-sm);
     background:
         linear-gradient(
             135deg,
@@ -747,7 +749,7 @@ DELETE MODAL
         rgba(15,23,42,0.7);
     border:
         1px solid rgba(255,255,255,0.08);
-    border-radius: 20px;
+    border-radius: var(--radius-card);
     padding: 1.5rem;
     min-width: 220px;
     backdrop-filter: blur(10px);
@@ -805,7 +807,7 @@ DELETE MODAL
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    border-radius: 12px;
+    border-radius: var(--radius-sm);
     background:
         rgba(255,255,255,0.05);
     color: var(--text);
@@ -854,14 +856,10 @@ DELETE MODAL
 }
 
 .about-badge {
-    display: inline-block;
     background: rgba(56,189,248,0.15);
     color: var(--primary);
     border: 1px solid rgba(56,189,248,0.25);
-    padding: 0.7rem 1.2rem;
-    border-radius: 999px;
     margin-bottom: 1.5rem;
-    font-size: 0.95rem;
 }
 
 .about-title {
@@ -893,7 +891,7 @@ DELETE MODAL
 ========================= */
 
 .about-card {
-    border-radius: 24px;
+    border-radius: var(--radius-lg);
     padding: 2rem;
     transition:
         transform 0.3s ease,
@@ -940,7 +938,7 @@ DELETE MODAL
     color: var(--primary);
     padding:
         0.7rem 1rem;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     font-size: 0.95rem;
     transition:
         transform 0.3s ease,
@@ -1015,21 +1013,15 @@ NODO INFO SECTION
 .contact-card {
     width: 100%;
     max-width: 850px;
-    border-radius: 28px;
+    border-radius: var(--radius-xl);
     padding: 3rem;
     text-align: center;
 }
 
 .contact-badge {
-    display: inline-block;
-    background:
-        rgba(56,189,248,0.15);
+    background: rgba(56,189,248,0.15);
     color: var(--primary);
-    border:
-        1px solid rgba(56,189,248,0.25);
-    padding:
-        0.7rem 1.2rem;
-    border-radius: 999px;
+    border: 1px solid rgba(56,189,248,0.25);
     margin-bottom: 1.5rem;
 }
 
@@ -1059,7 +1051,7 @@ NODO INFO SECTION
         rgba(15, 23, 42, 0.8);
     border:
         1px solid rgba(255,255,255,0.08);
-    border-radius: 16px;
+    border-radius: var(--radius-md);
     padding: 1rem 1.2rem;
     color: var(--text);
     font-size: 1rem;
@@ -1118,7 +1110,7 @@ NODO INFO SECTION
     width: 100%;
     max-width: 900px;
     margin: 0 auto;
-    border-radius: 28px;
+    border-radius: var(--radius-xl);
     padding: 3rem;
 }
 
@@ -1143,7 +1135,7 @@ NODO INFO SECTION
 .form-group input {
     width: 100%;
     padding: 1rem 1.2rem;
-    border-radius: 16px;
+    border-radius: var(--radius-md);
     border:
         1px solid rgba(255,255,255,0.08);
     background:
@@ -1222,7 +1214,7 @@ NODO INFO SECTION
 .feedback-card {
     width: 100%;
     max-width: 500px;
-    border-radius: 24px;
+    border-radius: var(--radius-lg);
     padding: 3rem 2rem;
     text-align: center;
 }

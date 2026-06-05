@@ -38,32 +38,8 @@
     <!-- FOOTER -->
     <%- include('../partials/footer') %>
 
-    <!-- SCRIPT MENU MOBILE -->
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-
-        const menuToggle =
-            document.getElementById('menu-toggle');
-
-        const navLinks =
-            document.getElementById('nav-links');
-
-        console.log(menuToggle);
-        console.log(navLinks);
-
-        if (menuToggle && navLinks) {
-
-            menuToggle.addEventListener('click', () => {
-
-                navLinks.classList.toggle('active');
-
-            });
-
-        }
-
-    });
-
-    </script>
+    <!-- SCRIPT PARA MANEJAR EL MENÚ RESPONSIVE -->
+    <script src="/js/menu.js"></script>
 
 </body>
 

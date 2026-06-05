@@ -114,11 +114,6 @@ const countrySchema = new mongoose.Schema({
         }
     },
 
-    /*flag: {
-        type: String,
-        trim: true,
-    },*/
-
     creador: {
         type: String,
         required: [

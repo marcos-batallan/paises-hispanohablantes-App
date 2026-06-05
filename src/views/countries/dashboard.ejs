@@ -316,45 +316,8 @@
 
             </table>
 
-            </div>
+        </div>
 
-            <!-- BOTÓN ELIMINAR -->
-            <div
-                id="delete-modal"
-                class="delete-modal hidden"
-            >
-
-                <div class="delete-modal-content">
-
-                    <h3>
-                        Confirmar eliminación
-                    </h3>
-
-                    <p>
-                        ¿Seguro que deseas eliminar este país?
-                    </p>
-
-                    <div class="delete-modal-actions">
-
-                        <button
-                            id="cancel-delete"
-                            class="btn btn-secondary"
-                        >
-                            Cancelar
-                        </button>
-
-                        <button
-                            id="confirm-delete"
-                            class="btn btn-confirm-delete btn-delete"
-                        >
-                            Eliminar
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
 
             <!-- PAGINACIÓN -->
 
@@ -448,7 +411,7 @@
 
     </div>
 
-        <!-- MODAL DELETE -->
+    <!-- MODAL DELETE -->
 
     <div
         id="delete-modal"
@@ -487,63 +450,8 @@
 
     </div>
 
-    <!--  SCRIPT PARA CONFIRMAR ELIMINACIÓN - UX MEJORADA -->
+    <!--  SCRIPT PARA CONFIRMAR ELIMINACIÓN -->
 
-    <script>
-
-        const modal =
-            document.getElementById(
-                'delete-modal'
-            );
-
-        const confirmBtn =
-            document.getElementById(
-                'confirm-delete'
-            );
-
-        const cancelBtn =
-            document.getElementById(
-                'cancel-delete'
-            );
-
-        let currentForm = null;
-
-        document
-            .querySelectorAll('.table-actions .btn .btn-delete')
-            .forEach(button => {
-
-                button.addEventListener(
-                    'click',
-                    (event) => {
-                        
-                        event.preventDefault();
-
-                        currentForm =
-                            button.closest('form');
-
-                        modal.classList.remove(
-                            'hidden'
-                        );
-                    }
-                );
-            });
-
-        cancelBtn.addEventListener(
-            'click',
-            () => {
-                modal.classList.add(
-                    'hidden'
-                );
-            }
-        );
-
-        confirmBtn.addEventListener(
-            'click',
-            () => {
-                currentForm.submit();
-            }
-        );
-
-    </script>
+    <script src="/js/deleteModal.js"></script>
 
 </section>
