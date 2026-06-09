@@ -36,6 +36,7 @@ La aplicación permite visualizar, administrar y gestionar información de país
 - express-validator
 - method-override
 - Morgan
+- Axios
 
 ## Frontend
 ![EJS](https://img.shields.io/badge/EJS-B4CA65?style=for-the-badge)
@@ -58,17 +59,17 @@ La aplicación permite visualizar, administrar y gestionar información de país
 
 # Características Principales
 
-✅ Dashboard interactivo  
-✅ CRUD completo de países  
-✅ Validaciones frontend y backend  
-✅ Responsive Design  
-✅ Búsqueda y filtros dinámicos  
-✅ Paginación  
-✅ Exportación CSV  
-✅ Cálculo de promedio Gini  
-✅ Feedback visual de operaciones  
-✅ Arquitectura MVC  
-✅ Manejo de errores y validaciones robustas  
+✅ Dashboard interactivo
+✅ CRUD completo de países
+✅ Validaciones frontend y backend
+✅ Responsive Design
+✅ Búsqueda y filtros dinámicos
+✅ Paginación
+✅ Exportación CSV
+✅ Cálculo de promedio Gini
+✅ Feedback visual de operaciones
+✅ Arquitectura MVC
+✅ Manejo de errores y validaciones robustas
 
 ---
 
@@ -108,8 +109,8 @@ El dashboard incorpora:
 
 - Tabla responsive
 - Búsqueda por nombre
+- Filtro por país
 - Filtro por capital
-- Filtro por región
 - Rango de población
 - Paginación
 - Estadísticas
@@ -169,7 +170,11 @@ public/
 ├── images/
 │   ├── background/
 │   ├── icons/
-│   └── readme/
+│   └── screenshots/
+│
+├── js/
+│   ├── deleteModal.js
+│   └── menu.js
 │
 src/
 │
@@ -178,6 +183,9 @@ src/
 │
 ├── controllers/
 │   └── countriesControllers.mjs
+│
+├── helpers/
+│   └── countriesHelper.mjs
 │
 ├── models/
 │   └── countryModel.mjs
@@ -196,9 +204,10 @@ src/
 │   └── countryValidator.mjs
 │
 ├── views/
-│   ├── layouts/
 │   ├── countries/
-│   └── feedback/
+│   ├── feedback/
+│   ├── layouts/
+│   └── partials/
 │
 ├── app.mjs
 └── server.mjs

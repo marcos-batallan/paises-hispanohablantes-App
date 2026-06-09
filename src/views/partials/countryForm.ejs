@@ -12,6 +12,9 @@
         type="text"
         id="name"
         name="name"
+        required
+        minlength="3"
+        maxlength="90"
         placeholder="Ej: Argentina"
         value="<%= oldData?.name || '' %>"
         class="<%= errors?.name ? 'input-error' : '' %>"
@@ -39,6 +42,9 @@
         type="text"
         id="capital"
         name="capital"
+        required
+        minlength="3"
+        maxlength="90"
         placeholder="Ej: Buenos Aires"
         value="<%= oldData?.capital || '' %>"
         class="<%= errors?.capital ? 'input-error' : '' %>"
@@ -99,6 +105,9 @@
         type="number"
         id="area"
         name="area"
+        required
+        step="0.01"
+        min="0.01"
         placeholder="Ej: 2780400"
         value="<%= oldData?.area || '' %>"
         class="<%= errors?.area ? 'input-error' : '' %>"
@@ -126,6 +135,9 @@
         type="number"
         id="population"
         name="population"
+        required
+        step="1"
+        min="1"
         placeholder="Ej: 46000000"
         value="<%= oldData?.population || '' %>"
         class="<%= errors?.population ? 'input-error' : '' %>"
@@ -151,9 +163,11 @@
 
     <input
         type="number"
-        step="0.1"
         id="gini"
         name="gini"
+        step="0.01"
+        min="0"
+        max="100"
         placeholder="Ej: 42.3"
         value="<%= oldData?.gini || '' %>"
         class="<%= errors?.gini ? 'input-error' : '' %>"
@@ -208,6 +222,9 @@
         type="text"
         id="creador"
         name="creador"
+        required
+        minlength="3"
+        maxlength="90"
         placeholder="Tu nombre"
         value="<%= oldData?.creador || '' %>"
         class="<%= errors?.creador ? 'input-error' : '' %>"
