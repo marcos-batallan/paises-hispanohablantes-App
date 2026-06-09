@@ -4,7 +4,11 @@
 // Si los campos no están definidos, se establecen como arrays vacíos.
 export const normalizeCountryData = (data) => {
 
+    //
     const normalized = { ...data };
+
+    // Establece la región como 'Americas' para todos los países, ya que solo se manejan países hispanohablantes de América
+    normalized.region = 'Americas'; 
 
     if (normalized.borders !== undefined) { // Verifica si el campo 'borders' está definido
 

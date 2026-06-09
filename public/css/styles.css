@@ -698,6 +698,11 @@ DELETE MODAL
         0 0 12px rgba(56,189,248,0.2);
 }
 
+.filters-form select option {
+    background: #0f172a;
+    color: var(--text);
+}
+
 .filters-form button {
     padding: 0.9rem 1.4rem;
     border: none;
